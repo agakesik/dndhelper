@@ -1,0 +1,17 @@
+{
+  "name": "dndHelper",
+  "displayName": "dndHelper",
+  "expo": {
+    "name": "dndHelper",
+    "slug": "dndHelper",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
