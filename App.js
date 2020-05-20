@@ -1,36 +1,87 @@
-import * as React from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import React, { Component , useState} from 'react';
+import { Text, TouchableHighlight, View, StyleSheet } from 'react-native';
 
-const instructions = Platform.select({
-  ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
-  android: `Double tap R on your keyboard to reload,\nShake or press menu button for dev menu`,
-});
+function Spells(props) {
+  const maxSlots = useState(props.maxSlots);
+  const [usedSlots, changeSlot] = useState(0);
 
-export default function App() {
+  const renderSpellSlots = () => {
+    let slots = []
+    for (let i=0; i<parseInt(maxSlots); i++) {
+      let isUsed = false;
+      if(i<usedSlots){
+        isUsed = true;
+      }
+      slots.push(isUsed);
+    }
+    return slots
+  };
+
+  const useSlot = () => {
+    if(parseInt(usedSlots) < parseInt(maxSlots)) {
+      changeSlot(usedSlots + 1);
+    } else {
+      alert('NO MORE SPELLS :c');
+    }
+  };
+  const clearSlot = () => {
+    if(parseInt(usedSlots) > 0) {
+      changeSlot(usedSlots - 1);
+    } else {
+      alert('SPELL FULL c:');
+    }
+  };
+
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome to React Native!</Text>
-      <Text style={styles.instructions}>To get started, edit App.js</Text>
-      <Text style={styles.instructions}>{instructions}</Text>
-    </View>
+    <>
+      <TouchableHighlight onPress={useSlot} onLongPress={clearSlot} underlayColor="red">
+        <View>
+          <Text>poziom {props.level}: {usedSlots}/{maxSlots}</Text>
+          <View style={styles.row}>
+            {renderSpellSlots().map((isUsed, i) => <SpellSlot isUsed={isUsed} key={i} />)}
+          </View>
+        </View>
+      </TouchableHighlight>
+    </>
   );
 }
+
+function SpellSlot(props) {
+  const [isUsed, setUsed] = useState(false)
+
+  return (
+    <View style={[styles.button, {backgroundColor: props.isUsed ? "blue" : "white" }]} />
+  )
+}
+
+export default function App() {
+    return (
+      <View style={styles.container}>
+        <Text>hello</Text>
+        <Spells level='1' maxSlots="4" onPress/>
+        <Spells level='2' maxSlots="3" />
+      </View>
+    )
+}
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: 'flex-start',
+    backgroundColor: '#fff',
+    padding: '5%',
+    paddingTop: '10%',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
+  button: {
     margin: 10,
+    height: 20,
+    width: 20,
+    borderWidth: 4,
+    borderColor: 'blue',
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  row: {
+    flexDirection: 'row',
+  }
 });
