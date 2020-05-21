@@ -4,15 +4,13 @@ import { Text, TouchableHighlight, View, StyleSheet } from 'react-native';
 function SingleSlot(props) {
   return (
     <View style={[styles.slot, {backgroundColor: props.isUsed ? "blue" : "white" }]} />
-  )
+  );
 }
 
-export default function SlotsContainer(props) {
+function AllSlots(props) {
   const maxSlots = useState(props.maxSlots);
-  const usedSlots = props.usedSlots;
-
-  const renderSlots = () => {
-    let slots = []
+  const usedSlots = props.usedSlots; 
+  let slots = []
     for (let i=0; i<parseInt(maxSlots); i++) {
       let isUsed = false;
       if(i<parseInt(usedSlots)){
@@ -20,23 +18,15 @@ export default function SlotsContainer(props) {
       }
       slots.push(isUsed);
     }
-    return slots
-  };
+  return (
+    slots.map((isUsed, i) =>
+      <SingleSlot isUsed={isUsed} key={i} /> )
+  );
+}
 
-  // const useSlot = () => {
-  //   if(parseInt(usedSlots) < parseInt(maxSlots)) {
-  //     changeSlot(usedSlots + 1);
-  //   } else {
-  //     alert('NO MORE SLOTS :c');
-  //   }
-  // };
-  // const clearSlot = () => {
-  //   if(parseInt(usedSlots) > 0) {
-  //     changeSlot(usedSlots - 1);
-  //   } else {
-  //     alert('SLOTS FULL c:');
-  //   }
-  // };
+export default function SlotsContainer(props) {
+  const maxSlots = useState(props.maxSlots);
+  const usedSlots = props.usedSlots;
 
   return (
     <>
@@ -47,11 +37,9 @@ export default function SlotsContainer(props) {
         style={styles.slotsContainer}
       >
         <View >
-          <Text>{props.value}.{props.name}: {usedSlots}/{maxSlots}</Text>
+          <Text>{props.name}: {usedSlots}/{maxSlots}</Text>
           <View style={styles.row}>
-            {renderSlots().map((isUsed, i) =>
-                <SingleSlot isUsed={isUsed} key={i} />
-            )}
+            <AllSlots maxSlots={maxSlots} usedSlots={usedSlots} />
           </View>
         </View>
       </TouchableHighlight>
