@@ -12,18 +12,44 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
+const STORAGE_KEY ='@save_state'
 
 export default class App extends Component {
+  state = {
+    abilities: [
+      {name: "Zaklęcia level 1", maxSlots: 4, usedSlots: 0, shortRest: false},
+      {name: "Zaklęcia level 2", maxSlots: 3, usedSlots: 0, shortRest: false},
+      {name: "Akt wiary", maxSlots: 1, usedSlots: 0, shortRest: true}, 
+      {name: "Eyes of the grave", maxSlots: 3, usedSlots: 0, shortRest: true},
+    ]
+  }
   constructor(props) {
     super(props);
-    this.state = {
-      abilities: [
-        {name: "Zaklęcia level 1", maxSlots: 4, usedSlots: 0, shortRest: false},
-        {name: "Zaklęcia level 2", maxSlots: 3, usedSlots: 0, shortRest: false},
-        {name: "Akt wiary", maxSlots: 1, usedSlots: 0, shortRest: true}, 
-        {name: "Eyes of the grave", maxSlots: 3, usedSlots: 0, shortRest: true},
-      ],
-    };
+    this.readState();
+  }
+  
+  saveState = async () => {
+    alert("trying to save")
+    try {
+      const stringValue = JSON.stringify(this.state.abilities)
+      await AsyncStorage.setItem('@saved_state', stringValue)
+      alert("data saved")
+    } catch (err) {
+      alert("failed to save to the storage")
+    }
+  }
+
+  readState = async () => {
+    try {
+      const stringValue = await AsyncStorage.getItem('@saved_state')
+      const loadedAbilities = JSON.parse(stringValue)
+
+      if (loadedAbilities !== null) {
+        this.setState({abilities: loadedAbilities})
+      }
+    } catch (err) {
+      alert('failed to fetch data')
+    }
   }
 
   useSlot(i) {
@@ -35,6 +61,7 @@ export default class App extends Component {
       alert('NO MORE SLOTS :c');
     }
   };
+
   clearSlot (i) {
     let abilities = this.state.abilities;
     if(abilities[i].usedSlots > 0) {
@@ -82,6 +109,17 @@ export default class App extends Component {
       <ScrollView style={styles.appView}>
         <View style={styles.controllerMenu}>
           <Button 
+            onPress={() => this.saveState()}
+            title="zapisz stan"
+          />
+          <Button 
+            onPress={() => this.readState()}
+            title="wczytaj stan"
+          />
+        </View>
+        {showAbilities}
+        <View style={styles.controllerMenu}>
+          <Button 
             onPress={() => this.shortRest()}
             title="short rest"
           />
@@ -90,7 +128,6 @@ export default class App extends Component {
             title="long rest"
           />
         </View>
-        {showAbilities}
       </ScrollView>
     );
   }
@@ -164,7 +201,6 @@ const styles = StyleSheet.create({
   controllerMenu: {
     flexDirection: 'row',
     justifyContent: "space-around",
-
   },
   ability: {
     backgroundColor: 'rgba(0,0,0, 0.05)',
