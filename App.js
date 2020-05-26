@@ -1,16 +1,12 @@
-import React, {
-  useState,
-  Component,
-} from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   ScrollView,
   View,
-  Text,
-  TouchableHighlight,
   Button,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import Ability from './Abilities.js'
 
 const STORAGE_KEY ='@save_state'
 
@@ -29,7 +25,6 @@ export default class App extends Component {
   }
   
   saveState = async () => {
-    alert("trying to save")
     try {
       const stringValue = JSON.stringify(this.state.abilities)
       await AsyncStorage.setItem('@saved_state', stringValue)
@@ -105,6 +100,7 @@ export default class App extends Component {
           shortRest={ability.shortRest}
           onPress={() => this.useSlot(i)}
           onLongPress={() => this.clearSlot(i)}
+          key={ability.name}
         />
     });
       
@@ -126,63 +122,6 @@ export default class App extends Component {
   }
 }
 
-function Ability(props) {
-  const maxSlots = useState(props.maxSlots);
-  const usedSlots = props.usedSlots;
-  const shortRest = props.shortRest;
-
-  return (
-    <>
-      <TouchableHighlight 
-        onPress={() => props.onPress()}
-        onLongPress={() => props.onLongPress()}
-        underlayColor="rgba(0,0,0, 0.2)"
-        style={styles.ability}
-      >
-        <View >
-          <Text>{props.name}: {usedSlots}/{maxSlots}</Text>
-          <View style={styles.row}>
-            <AllSlots 
-            maxSlots={maxSlots} 
-            usedSlots={usedSlots}
-            shortRest={shortRest}
-          />
-          </View>
-        </View>
-      </TouchableHighlight>
-    </>
-  );
-}
-
-function SingleSlot(props) {
-  return (
-    <View style={[
-      styles.slot, 
-      {backgroundColor: props.isUsed ? "blue" : "white" },
-      {borderRadius: props.shortRest ? 20 : 0 },
-    ]} />
-  );
-}
-
-function AllSlots(props) {
-  const maxSlots = props.maxSlots;
-  const usedSlots = props.usedSlots; 
-  const shortRest = props.shortRest
-  let slots = []
-    for (let i=0; i<parseInt(maxSlots); i++) {
-      let isUsed = false;
-      if(i<parseInt(usedSlots)){
-        isUsed = true;
-      }
-      slots.push(isUsed);
-    }
-  return (
-    slots.map((isUsed, i) =>
-      <SingleSlot isUsed={isUsed} shortRest={shortRest} key={i} /> )
-  );
-}
-
-
 const styles = StyleSheet.create({
   appView: {
     flex: 1,
@@ -195,20 +134,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: "space-around",
   },
-  ability: {
-    backgroundColor: 'rgba(0,0,0, 0.05)',
-    padding: 10,
-    borderRadius: 10,
-    margin: 10,
-  },
-  slot: {
-    margin: 10,
-    height: 20,
-    width: 20,
-    borderWidth: 4,
-    borderColor: 'blue',
-  },
-  row: {
-    flexDirection: 'row',
-  }
 });
