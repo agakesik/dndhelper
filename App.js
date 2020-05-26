@@ -4,9 +4,10 @@ import {
   ScrollView,
   View,
   Button,
+  Text
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import Ability from './Abilities.js'
+import Abilities from './Abilities.js'
 
 const STORAGE_KEY ='@save_state'
 
@@ -91,19 +92,6 @@ export default class App extends Component {
   }
 
   render() {  
-    let abilities = this.state.abilities;
-    let showAbilities = abilities.map((ability, i) => {
-        return <Ability 
-          name={ability.name} 
-          maxSlots={ability.maxSlots} 
-          usedSlots={ability.usedSlots} 
-          shortRest={ability.shortRest}
-          onPress={() => this.useSlot(i)}
-          onLongPress={() => this.clearSlot(i)}
-          key={ability.name}
-        />
-    });
-      
     return (
       <ScrollView style={styles.appView}>
         <View style={styles.controllerMenu}>
@@ -116,7 +104,11 @@ export default class App extends Component {
             title="long rest"
           />
         </View>
-        {showAbilities}
+        <Abilities 
+          abilities={this.state.abilities}
+          onPress={(i) => this.useSlot(i)}
+          onLongPress={(i) => this.clearSlot(i)}
+        />
       </ScrollView>
     );
   }
