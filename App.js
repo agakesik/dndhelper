@@ -33,7 +33,6 @@ export default class App extends Component {
     try {
       const stringValue = JSON.stringify(this.state.abilities)
       await AsyncStorage.setItem('@saved_state', stringValue)
-      alert("data saved")
     } catch (err) {
       alert("failed to save to the storage")
     }
@@ -57,6 +56,7 @@ export default class App extends Component {
     if(abilities[i].usedSlots < abilities[i].maxSlots) {
       abilities[i].usedSlots = abilities[i].usedSlots + 1;
       this.setState({abilities: abilities})
+      this.saveState()
     } else {
       alert('NO MORE SLOTS :c');
     }
@@ -67,6 +67,7 @@ export default class App extends Component {
     if(abilities[i].usedSlots > 0) {
       abilities[i].usedSlots = abilities[i].usedSlots - 1;
       this.setState({abilities: abilities})
+      this.saveState()
     } else {
       alert('SLOTS FULL c:');
     }
@@ -79,6 +80,7 @@ export default class App extends Component {
       abilities[i].usedSlots = 0
     }
     this.setState({abilities: abilities})
+    this.saveState()
   }
 
   shortRest() {
@@ -90,12 +92,13 @@ export default class App extends Component {
       }
     }
     this.setState({abilities: abilities})
+    this.saveState()
   }
 
   render() {  
     let abilities = this.state.abilities;
-    let showAbilities = abilities.map((ability, i) => 
-        <Ability 
+    let showAbilities = abilities.map((ability, i) => {
+        return <Ability 
           name={ability.name} 
           maxSlots={ability.maxSlots} 
           usedSlots={ability.usedSlots} 
@@ -103,21 +106,10 @@ export default class App extends Component {
           onPress={() => this.useSlot(i)}
           onLongPress={() => this.clearSlot(i)}
         />
-    );
+    });
       
     return (
       <ScrollView style={styles.appView}>
-        <View style={styles.controllerMenu}>
-          <Button 
-            onPress={() => this.saveState()}
-            title="zapisz stan"
-          />
-          <Button 
-            onPress={() => this.readState()}
-            title="wczytaj stan"
-          />
-        </View>
-        {showAbilities}
         <View style={styles.controllerMenu}>
           <Button 
             onPress={() => this.shortRest()}
@@ -128,6 +120,7 @@ export default class App extends Component {
             title="long rest"
           />
         </View>
+        {showAbilities}
       </ScrollView>
     );
   }
