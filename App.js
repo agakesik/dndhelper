@@ -4,10 +4,11 @@ import {
   ScrollView,
   View,
   Button,
-  Text
+  Text,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import Abilities from './Abilities.js'
+import Modal from 'react-native-modal';
+import Abilities from './Abilities.js';
 
 const STORAGE_KEY ='@save_state'
 
@@ -18,11 +19,16 @@ export default class App extends Component {
       {name: "Zaklęcia level 2", maxSlots: 3, usedSlots: 0, shortRest: false},
       {name: "Akt wiary", maxSlots: 1, usedSlots: 0, shortRest: true}, 
       {name: "Eyes of the grave", maxSlots: 3, usedSlots: 0, shortRest: true},
-    ]
-  }
+    ],
+    modalVisible: false,
+  };
   constructor(props) {
     super(props);
     this.readState();
+  }
+
+  setModalVisible(bool) {
+    this.setState({modalVisible: bool});
   }
   
   saveState = async () => {
@@ -91,9 +97,32 @@ export default class App extends Component {
     this.saveState()
   }
 
+  addAbility(props) {
+    const modalVisible = this.state.modalVisible
+  
+    return(
+      <View>
+        <Modal 
+          isVisible={modalVisible}
+          onRequestClose={() => this.setState({modalVisible: false})}
+        >
+          <View style={styles.modalContainer}>
+            <Text>I am the modal content!</Text>
+            <Button 
+              onPress={() => this.setState({modalVisible: false})}
+              title="anuluj"
+            />
+          </View>
+        </Modal>
+      </View>
+    );
+  }
+
   render() {  
     return (
       <ScrollView style={styles.appView}>
+        {this.addAbility()}
+        <Text>modal visible? {this.state.modalVisible ? "yes" : "no"}</Text>
         <View style={styles.controllerMenu}>
           <Button 
             onPress={() => this.shortRest()}
@@ -109,6 +138,10 @@ export default class App extends Component {
           onPress={(i) => this.useSlot(i)}
           onLongPress={(i) => this.clearSlot(i)}
         />
+        <Button
+        onPress={() => this.setModalVisible(true)}
+        title="dodaj"
+        />
       </ScrollView>
     );
   }
@@ -116,8 +149,6 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   appView: {
-    flex: 1,
-    // justifyContent: 'flex-start',
     backgroundColor: '#fff',
     padding: '5%',
     paddingTop: '10%',
@@ -126,4 +157,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: "space-around",
   },
+  modalContainer: {
+    backgroundColor: '#fff',
+    padding: 30,
+  }
 });
