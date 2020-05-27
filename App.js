@@ -95,15 +95,24 @@ export default class App extends Component {
     this.saveState()
   }
 
+  addAbility(name, maxSlots, isShortRest) {
+    const abilities =this.state.abilities;
+    const newAbility = { name: name, maxSlots: maxSlots, usedSlots: 0, shortRest: isShortRest}
+    this.setState({
+      abilities: abilities.concat(newAbility),
+    });
+    alert("dodany!")
+    this.setModalVisible(false)
+  }
+
   render() {  
     return (
       <ScrollView style={styles.appView}>
         <AddAbility 
           modalVisible={this.state.modalVisible}
           closeModal={() => this.setModalVisible(false)}
+          addAbility={(name, maxSlots, isShortRest) => this.addAbility(name, maxSlots, isShortRest)}
         />
-        {/* {this.addAbility()} */}
-        <Text>modal visible? {this.state.modalVisible ? "yes" : "no"}</Text>
         <View style={styles.controllerMenu}>
           <Button 
             onPress={() => this.shortRest()}
@@ -120,8 +129,8 @@ export default class App extends Component {
           onLongPress={(i) => this.clearSlot(i)}
         />
         <Button
-        onPress={() => this.setModalVisible(true)}
-        title="dodaj"
+          onPress={() => this.setModalVisible(true)}
+          title="dodaj"
         />
       </ScrollView>
     );
@@ -132,7 +141,7 @@ function AddAbility(props) {
   const modalVisible = props.modalVisible;
   const [name, setName] = useState('');
   const [maxSlots, setMaxSlots] = useState(0);
-  const [shortRest, setIfShortRest] = useState(false);
+  const [isShortRest, setIfShortRest] = useState(false);
   const [error, addError] = useState("");
 
   return(
@@ -148,6 +157,7 @@ function AddAbility(props) {
             placeholderTextColor="rgba(0,0,0,0.5)"
             maxLength={40}
             onChangeText={text => setName(text)}
+            value={name}
           />
           <TextInput
             placeholder="liczba użyć"
@@ -162,7 +172,7 @@ function AddAbility(props) {
             <Text style={{fontSize: 25}}>Short rest</Text>
             <RadioButton
               value="Short rest"
-              status={shortRest === true ? 'checked' : 'unchecked'}
+              status={isShortRest === true ? 'checked' : 'unchecked'}
               onPress={() => setIfShortRest(true)}
             />
           </View>
@@ -170,18 +180,27 @@ function AddAbility(props) {
             <Text style={{fontSize: 25}}>Long rest</Text>
             <RadioButton
               value="Long rest"
-              status={shortRest === false ? 'checked' : 'unchecked'}
+              status={isShortRest === false ? 'checked' : 'unchecked'}
               onPress={() => setIfShortRest(false)}
             />
           </View>
           <Text>nowa umiejętność:</Text>
           <Text>nazwa: {name}</Text>
           <Text>liczba użyć: {maxSlots}</Text>
-          <Text>rodzaj: {shortRest ? "short rest" : "long rest"}</Text>
+          <Text>rodzaj: {isShortRest ? "short rest" : "long rest"}</Text>
           <Text>{error}</Text>
           <Button 
             onPress={() => props.closeModal()}
             title="anuluj"
+          />
+          <Button 
+          title="dodaj"
+          onPress={() => {
+            props.addAbility(name, maxSlots, isShortRest);
+            setName("");
+            setMaxSlots(0);
+            setIfShortRest(false);
+          }}
           />
         </View>
       </Modal>
@@ -192,8 +211,7 @@ function AddAbility(props) {
 const styles = StyleSheet.create({
   appView: {
     backgroundColor: '#fff',
-    padding: '5%',
-    paddingTop: '10%',
+    marginTop: '3%',
   },
   controllerMenu: {
     flexDirection: 'row',
