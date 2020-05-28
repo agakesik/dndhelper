@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Abilities from './Abilities.js';
-import AddAbility from './Modals.js'
+import { AddAbility, DeleteAbility } from './Modals.js'
 
 export default class App extends Component {
   state = {
@@ -17,15 +17,20 @@ export default class App extends Component {
       {name: "Akt wiary", maxSlots: 1, usedSlots: 0, shortRest: true}, 
       {name: "Eyes of the grave", maxSlots: 3, usedSlots: 0, shortRest: true},
     ],
-    modalVisible: false,
+    addAbilityModalVisible: false,
+    deleteAbilityModalVisible: false,
   };
   constructor(props) {
     super(props);
     this.readState();
   }
 
-  setModalVisible(bool) {
-    this.setState({modalVisible: bool});
+  setModalVisible(modal, bool) {
+    if (modal === "add") {
+      this.setState({addAbilityModalVisible: bool});
+    } else if (modal === "delete") {
+      this.setState({deleteAbilityModalVisible: bool});
+    }
   }
   
   saveState = async () => {
@@ -98,18 +103,35 @@ export default class App extends Component {
     this.setState({
       abilities: abilities.concat(newAbility),
     });
-    alert("dodany!")
-    this.setModalVisible(false)
     this.saveState()
+    alert("dodany!")
+    this.setModalVisible("add", false)
+  }
+
+  deleteAbility(i) {
+    let abilitiesAfterDeleting = this.state.abilities.filter((ability, j) => {
+      if (i !== j) { return ability }
+    });
+    this.setState({
+      abilities: abilitiesAfterDeleting
+    });
+    this.saveState()
+    alert("usunięto " + this.state.abilities[i].name)
   }
 
   render() {  
     return (
       <ScrollView style={styles.appView}>
         <AddAbility 
-          modalVisible={this.state.modalVisible}
-          closeModal={() => this.setModalVisible(false)}
+          modalVisible={this.state.addAbilityModalVisible}
+          closeModal={() => this.setModalVisible("add", false)}
           addAbility={(name, maxSlots, isShortRest) => this.addAbility(name, maxSlots, isShortRest)}
+        />
+        <DeleteAbility 
+          modalVisible={this.state.deleteAbilityModalVisible}
+          closeModal={() => this.setModalVisible("delete", false)}
+          abilities={this.state.abilities}
+          deleteAbility={(i) => this.deleteAbility(i)}
         />
         <View style={styles.controllerMenu}>
           <Button 
@@ -127,8 +149,12 @@ export default class App extends Component {
           onLongPress={(i) => this.clearSlot(i)}
         />
         <Button
-          onPress={() => this.setModalVisible(true)}
+          onPress={() => this.setModalVisible("add", true)}
           title="dodaj"
+        />
+        <Button 
+          onPress={() => this.setModalVisible("delete", true)}
+          title="usuń"
         />
       </ScrollView>
     );

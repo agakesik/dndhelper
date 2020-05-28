@@ -24,7 +24,6 @@ export default function Abilities(props) {
   )
 }
 
-
 function Ability(props) {
   const maxSlots = props.maxSlots;
   const usedSlots = props.usedSlots;

@@ -5,22 +5,20 @@ import {
   View,
   Button,
   Text,
-  TextInput,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import RadioButton from 'react-native-paper/lib/commonjs/components/RadioButton/RadioButton';
+import TextInput from 'react-native-paper/lib/commonjs/components/TextInput/TextInput'
 
-export default function AddAbility(props) {
-  const modalVisible = props.modalVisible;
+export function AddAbility(props) {
   const [name, setName] = useState('');
   const [maxSlots, setMaxSlots] = useState(0);
   const [isShortRest, setIfShortRest] = useState(false);
-  const [error, addError] = useState("");
 
   return(
     <View>
       <Modal 
-        isVisible={modalVisible}
+        isVisible={props.modalVisible}
         onRequestClose={() => props.closeModal()}
       >
         <View style={styles.modalContainer}>
@@ -31,6 +29,7 @@ export default function AddAbility(props) {
             maxLength={40}
             onChangeText={text => setName(text)}
             value={name}
+            style={{height: 40}}
           />
           <TextInput
             placeholder="liczba użyć"
@@ -40,28 +39,33 @@ export default function AddAbility(props) {
             onChangeText={number => 
               setMaxSlots(number.replace(/[^1-9]/g, ''))
             }
+            style={{height: 40}}
           />
-          <View style={styles.radioButton}>
-            <Text style={{fontSize: 25}}>Short rest</Text>
-            <RadioButton
-              value="Short rest"
-              status={isShortRest === true ? 'checked' : 'unchecked'}
-              onPress={() => setIfShortRest(true)}
-            />
-          </View>
-          <View style={styles.radioButton}>
-            <Text style={{fontSize: 25}}>Long rest</Text>
-            <RadioButton
-              value="Long rest"
-              status={isShortRest === false ? 'checked' : 'unchecked'}
-              onPress={() => setIfShortRest(false)}
-            />
-          </View>
+          <RadioButton.Group
+            onValueChange={value => setIfShortRest(value)}
+          >
+            <View style={styles.radioButton}>
+              {/* <Text style={{fontSize: 25}}>Short rest</Text> */}
+              <RadioButton.Item 
+                label="short rest"
+                value={true}
+                status={isShortRest === true ? 'checked' : 'unchecked'}
+                />
+            </View>
+            <View style={styles.radioButton}>
+              <RadioButton.Item
+                label="long rest"
+                value={false}
+                status={isShortRest === false ? 'checked' : 'unchecked'}
+                style={isShortRest === true ? {textColor: 'blue'} : {textColor: 'red'}}
+                />
+            </View>
+          </RadioButton.Group>
+
           <Text>nowa umiejętność:</Text>
           <Text>nazwa: {name}</Text>
           <Text>liczba użyć: {maxSlots}</Text>
           <Text>rodzaj: {isShortRest ? "short rest" : "long rest"}</Text>
-          <Text>{error}</Text>
           <Button 
             onPress={() => props.closeModal()}
             title="anuluj"
@@ -81,6 +85,45 @@ export default function AddAbility(props) {
   );
 }
 
+export function DeleteAbility(props) {
+  const abilities = props.abilities
+  const [abilityNumber, chooseAbility] = useState()
+  return (
+    <View>
+      <Modal
+        isVisible={props.modalVisible}
+        onRequestClose={() => props.closeModal()}
+      >
+        <View style={styles.modalContainer}>
+          {abilities.map((ability, i) => (
+            <RadioButton.Item
+              key={i}
+              label={ability.name +": "+ ability.usedSlots +"/" +ability.maxSlots}
+              value={i}
+              status={abilityNumber === i ? 'checked' : 'unchecked'}
+              onPress={() => chooseAbility(i)}
+            />
+          ))}
+          <Button 
+            title="usuń"
+            onPress={() => {
+              props.deleteAbility(abilityNumber)
+              chooseAbility(null)
+            }}
+          />
+          <Button 
+            onPress={() => {
+              props.closeModal()
+              chooseAbility(null)
+            }}
+            title="anuluj"
+          />
+          <Text>Usuń umiejętność: {abilityNumber ? abilities[abilityNumber].name : ""}</Text>
+        </View>
+      </Modal>
+    </View>
+  )
+}
 const styles = StyleSheet.create({
   modalContainer: {
     backgroundColor: '#fff',
@@ -90,6 +133,5 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap', 
     flexDirection: 'row',
     alignContent: 'flex-end'
-    // justifyContent: 'center'
   }
 });
