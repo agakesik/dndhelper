@@ -72,7 +72,9 @@ export function AddAbility(props) {
           <Button 
           title="dodaj"
           onPress={() => {
-            if (props.abilities.find(ability => ability.name === name)) {
+            if (name===""){
+              alert("nazwa nie moze być pusta")
+            } else if (props.abilities.find(ability => ability.name === name)) {
               alert("nazwa nie moze się powtarzać")
             } else if (maxSlots === 0) {
               alert("liczba musi być większa niż 0 (i musi być cyfrą)")
