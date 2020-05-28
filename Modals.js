@@ -75,7 +75,7 @@ export function AddAbility(props) {
             if (props.abilities.find(ability => ability.name === name)) {
               alert("nazwa nie moze się powtarzać")
             } else if (maxSlots === 0) {
-              alert("liczba musi być większa niż 0")
+              alert("liczba musi być większa niż 0 (i musi być cyfrą)")
             } else {
               props.addAbility(name, maxSlots, isShortRest);
               setName("");
@@ -90,7 +90,7 @@ export function AddAbility(props) {
   );
 }
 
-export function DeleteAbility(props) {
+export function EditAbility(props) {
   const abilities = props.abilities
   const [abilityNumber, chooseAbility] = useState()
   return (
@@ -101,13 +101,27 @@ export function DeleteAbility(props) {
       >
         <View style={styles.modalContainer}>
           {abilities.map((ability, i) => (
-            <RadioButton.Item
-              key={i}
-              label={ability.name +": "+ ability.usedSlots +"/" +ability.maxSlots}
-              value={i}
-              status={abilityNumber === i ? 'checked' : 'unchecked'}
-              onPress={() => chooseAbility(i)}
-            />
+            <View key={i}
+            style={{flexDirection: 'row', justifyContent: "flex-end",}}
+            >
+              <RadioButton.Item
+                key={i}
+                label={ability.name +": "+ ability.usedSlots +"/" +ability.maxSlots}
+                value={i}
+                status={abilityNumber === i ? 'checked' : 'unchecked'}
+                onPress={() => chooseAbility(i)}
+              />
+              <Button 
+                onPress={() => props.moveUp(i)}
+                title="^"
+                disabled={i===0 ? true : false}
+              />
+              <Button 
+                onPress={() => props.moveDown(i)}
+                title="v"
+                disabled={i===abilities.length-1 ? true : false}
+              />
+            </View>
           ))}
           <Button 
             title="usuń"
@@ -115,6 +129,9 @@ export function DeleteAbility(props) {
               props.deleteAbility(abilityNumber)
               chooseAbility(null)
             }}
+          />
+          <Button 
+          title="edytuj"
           />
           <Button 
             onPress={() => {

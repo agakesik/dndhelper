@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Abilities from './Abilities.js';
-import { AddAbility, DeleteAbility } from './Modals.js'
+import { AddAbility, EditAbility } from './Modals.js'
 
 export default class App extends Component {
   state = {
@@ -28,7 +28,7 @@ export default class App extends Component {
   setModalVisible(modal, bool) {
     if (modal === "add") {
       this.setState({addAbilityModalVisible: bool});
-    } else if (modal === "delete") {
+    } else if (modal === "edit") {
       this.setState({deleteAbilityModalVisible: bool});
     }
   }
@@ -119,6 +119,24 @@ export default class App extends Component {
     alert("usunięto " + this.state.abilities[i].name)
   }
 
+  moveUp(i) {
+    let abilities = this.state.abilities
+    let temp = abilities[i-1]
+    abilities[i-1] = abilities[i]
+    abilities[i] = temp
+    this.setState({abilities: abilities})
+    this.saveState()
+  }
+
+  moveDown(i) {
+    let abilities = this.state.abilities
+    let temp = abilities[i+1]
+    abilities[i+1] = abilities[i]
+    abilities[i] = temp
+    this.setState({abilities: abilities})
+    this.saveState()
+  }
+
   render() {  
     return (
       <ScrollView style={styles.appView}>
@@ -128,11 +146,13 @@ export default class App extends Component {
           abilities={this.state.abilities}
           addAbility={(name, maxSlots, isShortRest) => this.addAbility(name, maxSlots, isShortRest)}
         />
-        <DeleteAbility 
+        <EditAbility 
           modalVisible={this.state.deleteAbilityModalVisible}
-          closeModal={() => this.setModalVisible("delete", false)}
+          closeModal={() => this.setModalVisible("edit", false)}
           abilities={this.state.abilities}
           deleteAbility={(i) => this.deleteAbility(i)}
+          moveUp={(i) => this.moveUp(i)}
+          moveDown={(i) => this.moveDown(i)}
         />
         <View style={styles.controllerMenu}>
           <Button 
@@ -154,8 +174,8 @@ export default class App extends Component {
           title="dodaj"
         />
         <Button 
-          onPress={() => this.setModalVisible("delete", true)}
-          title="usuń"
+          onPress={() => this.setModalVisible("edit", true)}
+          title="edytuj / usuń"
         />
       </ScrollView>
     );
