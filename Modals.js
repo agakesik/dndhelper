@@ -26,7 +26,7 @@ export function AddAbility(props) {
           <TextInput
             placeholder="nazwa"
             placeholderTextColor="rgba(0,0,0,0.5)"
-            maxLength={40}
+            maxLength={25}
             onChangeText={text => setName(text)}
             value={name}
             style={{height: 40}}
@@ -45,7 +45,6 @@ export function AddAbility(props) {
             onValueChange={value => setIfShortRest(value)}
           >
             <View style={styles.radioButton}>
-              {/* <Text style={{fontSize: 25}}>Short rest</Text> */}
               <RadioButton.Item 
                 label="short rest"
                 value={true}
@@ -73,10 +72,16 @@ export function AddAbility(props) {
           <Button 
           title="dodaj"
           onPress={() => {
-            props.addAbility(name, maxSlots, isShortRest);
-            setName("");
-            setMaxSlots(0);
-            setIfShortRest(false);
+            if (props.abilities.find(ability => ability.name === name)) {
+              alert("nazwa nie moze się powtarzać")
+            } else if (maxSlots === 0) {
+              alert("liczba musi być większa niż 0")
+            } else {
+              props.addAbility(name, maxSlots, isShortRest);
+              setName("");
+              setMaxSlots(0);
+              setIfShortRest(false);
+            }
           }}
           />
         </View>

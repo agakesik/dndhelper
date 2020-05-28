@@ -100,12 +100,12 @@ export default class App extends Component {
   addAbility(name, maxSlots, isShortRest) {
     const abilities =this.state.abilities;
     const newAbility = { name: name, maxSlots: maxSlots, usedSlots: 0, shortRest: isShortRest}
-    this.setState({
-      abilities: abilities.concat(newAbility),
-    });
-    this.saveState()
-    alert("dodany!")
-    this.setModalVisible("add", false)
+      this.setState({
+        abilities: abilities.concat(newAbility),
+      });
+      this.saveState()
+      alert("dodany!")
+      this.setModalVisible("add", false)
   }
 
   deleteAbility(i) {
@@ -125,6 +125,7 @@ export default class App extends Component {
         <AddAbility 
           modalVisible={this.state.addAbilityModalVisible}
           closeModal={() => this.setModalVisible("add", false)}
+          abilities={this.state.abilities}
           addAbility={(name, maxSlots, isShortRest) => this.addAbility(name, maxSlots, isShortRest)}
         />
         <DeleteAbility 
