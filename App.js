@@ -7,18 +7,19 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Abilities from './Abilities.js';
-import { AddAbility, EditAbility } from './Modals.js'
+import { AddAbility, ManageAbilities, EditAbility } from './Modals.js'
 
 export default class App extends Component {
   state = {
     abilities: [
-      {name: "Zaklęcia level 1", maxSlots: 4, usedSlots: 0, shortRest: false},
-      {name: "Zaklęcia level 2", maxSlots: 3, usedSlots: 0, shortRest: false},
-      {name: "Akt wiary", maxSlots: 1, usedSlots: 0, shortRest: true}, 
-      {name: "Eyes of the grave", maxSlots: 3, usedSlots: 0, shortRest: true},
+      {name: "Zaklęcia level 1", maxSlots: '4', usedSlots: '0', shortRest: false},
+      {name: "Zaklęcia level 2", maxSlots: '3', usedSlots: '0', shortRest: false},
+      {name: "Akt wiary", maxSlots: '1', usedSlots: '0', shortRest: true}, 
+      {name: "Eyes of the grave", maxSlots: '3', usedSlots: '0', shortRest: true},
     ],
     addAbilityModalVisible: false,
-    deleteAbilityModalVisible: false,
+    menageAbilitiesModalVisible: false,
+    editAbilityModalVisible: false,
   };
   constructor(props) {
     super(props);
@@ -28,8 +29,10 @@ export default class App extends Component {
   setModalVisible(modal, bool) {
     if (modal === "add") {
       this.setState({addAbilityModalVisible: bool});
-    } else if (modal === "edit") {
-      this.setState({deleteAbilityModalVisible: bool});
+    } else if (modal === "manage") {
+      this.setState({menageAbilitiesModalVisible: bool});
+    } else if (modal === "edit"){
+      this.setState({editAbilityModalVisible: bool});
     }
   }
   
@@ -137,6 +140,15 @@ export default class App extends Component {
     this.saveState()
   }
 
+  editAbility(i, name, maxSlots, shortRest) {
+    let abilities = this.state.abilities
+    if (name) {abilities[i].name = name}
+    if (maxSlots) {abilities[i].maxSlots = maxSlots}
+    if (shortRest) {abilities[i].shortRest = shortRest}
+    this.setState({abilities: abilities})
+    this.saveState()
+  }
+
   render() {  
     return (
       <ScrollView style={styles.appView}>
@@ -146,13 +158,17 @@ export default class App extends Component {
           abilities={this.state.abilities}
           addAbility={(name, maxSlots, isShortRest) => this.addAbility(name, maxSlots, isShortRest)}
         />
-        <EditAbility 
-          modalVisible={this.state.deleteAbilityModalVisible}
-          closeModal={() => this.setModalVisible("edit", false)}
+        <ManageAbilities 
+          modalVisible={this.state.menageAbilitiesModalVisible}
+          closeModal={() => this.setModalVisible("manage", false)}
           abilities={this.state.abilities}
           deleteAbility={(i) => this.deleteAbility(i)}
           moveUp={(i) => this.moveUp(i)}
           moveDown={(i) => this.moveDown(i)}
+          openEdit={() => this.setModalVisible("edit", true)}
+          editAbilityModalVisible={this.state.editAbilityModalVisible}
+          closeEditModal={() => this.setModalVisible("edit", false)}
+          editAbility={(i, name, maxSlots, isShortRest) => this.editAbility(i, name, maxSlots, isShortRest)}
         />
         <View style={styles.controllerMenu}>
           <Button 
@@ -174,7 +190,7 @@ export default class App extends Component {
           title="dodaj"
         />
         <Button 
-          onPress={() => this.setModalVisible("edit", true)}
+          onPress={() => this.setModalVisible("manage", true)}
           title="edytuj / usuń"
         />
       </ScrollView>

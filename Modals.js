@@ -56,7 +56,6 @@ export function AddAbility(props) {
                 label="long rest"
                 value={false}
                 status={isShortRest === false ? 'checked' : 'unchecked'}
-                style={isShortRest === true ? {textColor: 'blue'} : {textColor: 'red'}}
                 />
             </View>
           </RadioButton.Group>
@@ -81,7 +80,7 @@ export function AddAbility(props) {
             } else {
               props.addAbility(name, maxSlots, isShortRest);
               setName("");
-              setMaxSlots(0);
+              setMaxSlots('');
               setIfShortRest(false);
             }
           }}
@@ -92,11 +91,19 @@ export function AddAbility(props) {
   );
 }
 
-export function EditAbility(props) {
+export function ManageAbilities(props) {
   const abilities = props.abilities
   const [abilityNumber, chooseAbility] = useState()
+  
   return (
     <View>
+      <EditAbility
+          modalVisible={props.editAbilityModalVisible}
+          closeModal={() => props.closeEditModal()}
+          ability={abilities[abilityNumber]}
+          editAbility={(name, maxSlots, isShortRest) => 
+            props.editAbility(abilityNumber, name, maxSlots, isShortRest)}
+        />
       <Modal
         isVisible={props.modalVisible}
         onRequestClose={() => props.closeModal()}
@@ -133,14 +140,18 @@ export function EditAbility(props) {
             }}
           />
           <Button 
-          title="edytuj"
+            title="edytuj"
+            onPress={() => {
+              if (abilityNumber || abilityNumber === 0) {
+                props.openEdit()}
+              }}
           />
           <Button 
             onPress={() => {
               props.closeModal()
               chooseAbility(null)
             }}
-            title="anuluj"
+            title="zamknij"
           />
           <Text>Usuń umiejętność: {abilityNumber ? abilities[abilityNumber].name : ""}</Text>
         </View>
@@ -148,6 +159,71 @@ export function EditAbility(props) {
     </View>
   )
 }
+
+export function EditAbility(props) {
+  const ability = props.ability || {name: "", maxSlots: '', shortRest: false}
+  
+  const [name, setName] = useState(null);
+  const [maxSlots, setMaxSlots] = useState(null);
+  const [isShortRest, setIfShortRest] = useState(null);
+
+  return(
+    <View>
+      <Modal
+        isVisible={props.modalVisible}
+        onRequestClose={() => props.closeModal()}
+      >
+        <View style={styles.modalContainer}>
+          <Text>Edytuj {ability.name}</Text>
+
+          <TextInput
+            placeholder={"nazwa: " + ability.name}
+            value={name}
+            onChangeText={text => setName(text)}
+          />
+          <TextInput
+           placeholder={"Użycia: " + ability.maxSlots}
+           value={maxSlots}
+           onChangeText={text => setMaxSlots(text)}
+          />
+          <RadioButton.Group
+            onValueChange={value => setIfShortRest(value)}
+          >
+            <View style={styles.radioButton}>
+              <RadioButton.Item 
+                label={(ability.shortRest ? "-> " : "    ") + "short rest"}
+                value={true}
+                status={isShortRest === true ? 'checked' : 'unchecked'}
+                />
+            </View>
+            <View style={styles.radioButton}>
+              <RadioButton.Item
+                label={(ability.shortRest ? "    " : "-> ") + "long rest"}
+                value={false}
+                status={isShortRest === false ? 'checked' : 'unchecked'}
+                />
+            </View>
+          </RadioButton.Group>
+          <Button 
+            onPress={() => {
+              props.editAbility(name, maxSlots, isShortRest)
+              props.closeModal()
+              setName(null);
+              setMaxSlots(null);
+              setIfShortRest(null);
+            }}
+            title="edytuj"
+          />
+          <Button 
+            onPress={() => {props.closeModal()}}
+            title="anuluj"
+          />
+        </View>
+      </Modal>
+    </View>
+  )
+}
+
 const styles = StyleSheet.create({
   modalContainer: {
     backgroundColor: '#fff',
