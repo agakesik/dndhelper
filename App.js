@@ -1,14 +1,11 @@
 import React, { Component, useState } from 'react';
 import {
-  StyleSheet,
-  ScrollView,
-  View,
-  // Button,
+  StyleSheet, ScrollView, View,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Abilities from './Abilities.js';
 import { AddAbility, ManageAbilities } from './Modals.js'
-import { Provider as PaperProvider, Button } from 'react-native-paper';
+import { Provider as PaperProvider, Button, Switch, Text } from 'react-native-paper';
 import { theme } from './Styles.js'
 
 export default class App extends Component {
@@ -22,6 +19,7 @@ export default class App extends Component {
     addAbilityModalVisible: false,
     menageAbilitiesModalVisible: false,
     editAbilityModalVisible: false,
+    viewCompact: false,
   };
   constructor(props) {
     super(props);
@@ -36,6 +34,11 @@ export default class App extends Component {
     } else if (modal === "edit"){
       this.setState({editAbilityModalVisible: bool});
     }
+  }
+
+  toggleViewCompact() {
+    const newState = !this.state.viewCompact
+    this.setState({viewCompact: newState});
   }
   
   saveState = async () => {
@@ -152,43 +155,52 @@ export default class App extends Component {
   render() {  
     return (
       <PaperProvider style={{flex: 1}} theme={theme}>
+        <AddAbility 
+          modalVisible={this.state.addAbilityModalVisible}
+          closeModal={() => this.setModalVisible("add", false)}
+          abilities={this.state.abilities}
+          addAbility={(name, maxSlots, isShortRest) => this.addAbility(name, maxSlots, isShortRest)}
+        />
+        <ManageAbilities 
+          modalVisible={this.state.menageAbilitiesModalVisible}
+          closeModal={() => this.setModalVisible("manage", false)}
+          abilities={this.state.abilities}
+          deleteAbility={(i) => this.deleteAbility(i)}
+          moveUp={(i) => this.moveUp(i)}
+          moveDown={(i) => this.moveDown(i)}
+          openEdit={() => this.setModalVisible("edit", true)}
+          editAbilityModalVisible={this.state.editAbilityModalVisible}
+          closeEditModal={() => this.setModalVisible("edit", false)}
+          editAbility={(i, name, maxSlots, isShortRest) => this.editAbility(i, name, maxSlots, isShortRest)}
+        />
+        <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+          <Text style={{alignSelf: 'center', fontSize: 12}}>Widok kompaktowy</Text>
+          <Switch
+            value={this.state.viewCompact}
+            onValueChange={() => this.toggleViewCompact()}
+            style={{margin: 10,}}
+          />
+        </View>
         <ScrollView style={styles.abilitiesView}>
-          <AddAbility 
-            modalVisible={this.state.addAbilityModalVisible}
-            closeModal={() => this.setModalVisible("add", false)}
-            abilities={this.state.abilities}
-            addAbility={(name, maxSlots, isShortRest) => this.addAbility(name, maxSlots, isShortRest)}
-          />
-          <ManageAbilities 
-            modalVisible={this.state.menageAbilitiesModalVisible}
-            closeModal={() => this.setModalVisible("manage", false)}
-            abilities={this.state.abilities}
-            deleteAbility={(i) => this.deleteAbility(i)}
-            moveUp={(i) => this.moveUp(i)}
-            moveDown={(i) => this.moveDown(i)}
-            openEdit={() => this.setModalVisible("edit", true)}
-            editAbilityModalVisible={this.state.editAbilityModalVisible}
-            closeEditModal={() => this.setModalVisible("edit", false)}
-            editAbility={(i, name, maxSlots, isShortRest) => this.editAbility(i, name, maxSlots, isShortRest)}
-          />
           <Abilities 
             abilities={this.state.abilities}
             onPress={(i) => this.useSlot(i)}
             onLongPress={(i) => this.clearSlot(i)}
+            viewCompact={this.state.viewCompact}
           />
         </ScrollView>
         <View style={[styles.controllerMenu, {backgroundColor: theme.colors.primary}]}>
           <Button 
             onPress={() => this.shortRest()}
             style={styles.controllerButton}
-            labelStyle={{color: theme.colors.background}}
+            color={theme.colors.background}
             >
            short rest
             </Button>
           <Button 
             onPress={() => this.longRest()}
             style={styles.controllerButton}
-            labelStyle={{color: theme.colors.background}}
+            color={theme.colors.background}
             >
             long rest
           </Button>

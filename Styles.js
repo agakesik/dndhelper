@@ -8,6 +8,6 @@ export const theme = {
     primary: '#3C8A90',
     accent: '#FFD343',
     disabled: '#245457',
-    surface: '#245457',
+    surface: '#f6f6f6',
   },
 }
