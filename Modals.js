@@ -153,7 +153,6 @@ export function ManageAbilities(props) {
             }}
             title="zamknij"
           />
-          <Text>Usuń umiejętność: {abilityNumber ? abilities[abilityNumber].name : ""}</Text>
         </View>
       </Modal>
     </View>

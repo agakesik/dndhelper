@@ -3,11 +3,13 @@ import {
   StyleSheet,
   ScrollView,
   View,
-  Button,
+  // Button,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Abilities from './Abilities.js';
-import { AddAbility, ManageAbilities, EditAbility } from './Modals.js'
+import { AddAbility, ManageAbilities } from './Modals.js'
+import { Provider as PaperProvider, Button } from 'react-native-paper';
+import { theme } from './Styles.js'
 
 export default class App extends Component {
   state = {
@@ -107,7 +109,6 @@ export default class App extends Component {
         abilities: abilities.concat(newAbility),
       });
       this.saveState()
-      alert("dodany!")
       this.setModalVisible("add", false)
   }
 
@@ -119,7 +120,6 @@ export default class App extends Component {
       abilities: abilitiesAfterDeleting
     });
     this.saveState()
-    alert("usunięto " + this.state.abilities[i].name)
   }
 
   moveUp(i) {
@@ -151,62 +151,78 @@ export default class App extends Component {
 
   render() {  
     return (
-      <ScrollView style={styles.appView}>
-        <AddAbility 
-          modalVisible={this.state.addAbilityModalVisible}
-          closeModal={() => this.setModalVisible("add", false)}
-          abilities={this.state.abilities}
-          addAbility={(name, maxSlots, isShortRest) => this.addAbility(name, maxSlots, isShortRest)}
-        />
-        <ManageAbilities 
-          modalVisible={this.state.menageAbilitiesModalVisible}
-          closeModal={() => this.setModalVisible("manage", false)}
-          abilities={this.state.abilities}
-          deleteAbility={(i) => this.deleteAbility(i)}
-          moveUp={(i) => this.moveUp(i)}
-          moveDown={(i) => this.moveDown(i)}
-          openEdit={() => this.setModalVisible("edit", true)}
-          editAbilityModalVisible={this.state.editAbilityModalVisible}
-          closeEditModal={() => this.setModalVisible("edit", false)}
-          editAbility={(i, name, maxSlots, isShortRest) => this.editAbility(i, name, maxSlots, isShortRest)}
-        />
-        <View style={styles.controllerMenu}>
+      <PaperProvider style={{flex: 1}} theme={theme}>
+        <ScrollView style={styles.abilitiesView}>
+          <AddAbility 
+            modalVisible={this.state.addAbilityModalVisible}
+            closeModal={() => this.setModalVisible("add", false)}
+            abilities={this.state.abilities}
+            addAbility={(name, maxSlots, isShortRest) => this.addAbility(name, maxSlots, isShortRest)}
+          />
+          <ManageAbilities 
+            modalVisible={this.state.menageAbilitiesModalVisible}
+            closeModal={() => this.setModalVisible("manage", false)}
+            abilities={this.state.abilities}
+            deleteAbility={(i) => this.deleteAbility(i)}
+            moveUp={(i) => this.moveUp(i)}
+            moveDown={(i) => this.moveDown(i)}
+            openEdit={() => this.setModalVisible("edit", true)}
+            editAbilityModalVisible={this.state.editAbilityModalVisible}
+            closeEditModal={() => this.setModalVisible("edit", false)}
+            editAbility={(i, name, maxSlots, isShortRest) => this.editAbility(i, name, maxSlots, isShortRest)}
+          />
+          <Abilities 
+            abilities={this.state.abilities}
+            onPress={(i) => this.useSlot(i)}
+            onLongPress={(i) => this.clearSlot(i)}
+          />
+        </ScrollView>
+        <View style={[styles.controllerMenu, {backgroundColor: theme.colors.primary}]}>
           <Button 
             onPress={() => this.shortRest()}
-            title="short rest"
-          />
+            style={styles.controllerButton}
+            labelStyle={{color: theme.colors.background}}
+            >
+           short rest
+            </Button>
           <Button 
             onPress={() => this.longRest()}
-            title="long rest"
-          />
+            style={styles.controllerButton}
+            labelStyle={{color: theme.colors.background}}
+            >
+            long rest
+          </Button>
         </View>
-        <Abilities 
-          abilities={this.state.abilities}
-          onPress={(i) => this.useSlot(i)}
-          onLongPress={(i) => this.clearSlot(i)}
-        />
-        <Button
-          onPress={() => this.setModalVisible("add", true)}
-          title="dodaj"
-        />
-        <Button 
-          onPress={() => this.setModalVisible("manage", true)}
-          title="edytuj / usuń"
-        />
-      </ScrollView>
+        <View style={styles.controllerMenu}>
+          <Button
+            onPress={() => this.setModalVisible("add", true)}
+            style={styles.controllerButton}
+            >
+            dodaj
+          </Button>
+          <Button 
+            onPress={() => this.setModalVisible("manage", true)}
+            style={styles.controllerButton}
+            >
+            edytuj / usuń
+          </Button>
+        </View>
+      </PaperProvider>
     );
   }
 }
 
-
-
 const styles = StyleSheet.create({
-  appView: {
-    backgroundColor: '#fff',
-    marginTop: '3%',
+  abilitiesView: {
+    marginBottom: 2,
   },
   controllerMenu: {
     flexDirection: 'row',
-    justifyContent: "space-around",
+    justifyContent: 'space-evenly',
+    padding: 5,
+  },
+  controllerButton: {
+    minWidth: '50%', 
+    borderRadius: 20,
   },
 });
