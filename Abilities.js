@@ -1,11 +1,6 @@
 
 import React, { useState } from 'react'
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableHighlight,
-} from 'react-native';
+import { StyleSheet, View, TouchableHighlight } from 'react-native';
 import { theme } from './Styles.js'
 import { Surface, Title } from 'react-native-paper';
 

@@ -7,7 +7,8 @@ export const theme = {
     ...DefaultTheme.colors,
     primary: '#3C8A90',
     accent: '#FFD343',
-    disabled: '#245457',
     surface: '#f6f6f6',
+    gray: '#b3b3b3',
+
   },
 }

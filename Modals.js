@@ -1,14 +1,9 @@
 
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Button,
-  Text,
-} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Modal from 'react-native-modal';
-import RadioButton from 'react-native-paper/lib/commonjs/components/RadioButton/RadioButton';
-import TextInput from 'react-native-paper/lib/commonjs/components/TextInput/TextInput'
+import { RadioButton, TextInput, Text, Subheading, Button, Headline } from 'react-native-paper'
+import { theme } from './Styles.js'
 
 export function AddAbility(props) {
   const [name, setName] = useState('');
@@ -22,10 +17,10 @@ export function AddAbility(props) {
         onRequestClose={() => props.closeModal()}
       >
         <View style={styles.modalContainer}>
-          <Text>Dodaj nową umiejętność</Text>
+          <Headline style={{marginBottom: 15}}>Dodaj nową umiejętność</Headline>
           <TextInput
             placeholder="nazwa"
-            placeholderTextColor="rgba(0,0,0,0.5)"
+            // placeholderTextColor="rgba(0,0,0,0.5)"
             maxLength={25}
             onChangeText={text => setName(text)}
             value={name}
@@ -41,50 +36,66 @@ export function AddAbility(props) {
             }
             style={{height: 40}}
           />
-          <RadioButton.Group
-            onValueChange={value => setIfShortRest(value)}
-          >
-            <View style={styles.radioButton}>
-              <RadioButton.Item 
-                label="short rest"
-                value={true}
-                status={isShortRest === true ? 'checked' : 'unchecked'}
-                />
-            </View>
-            <View style={styles.radioButton}>
-              <RadioButton.Item
-                label="long rest"
-                value={false}
-                status={isShortRest === false ? 'checked' : 'unchecked'}
-                />
-            </View>
-          </RadioButton.Group>
+          <View style={styles.radioButtonContainer}>
+            <RadioButton.Group
+              onValueChange={value => setIfShortRest(value)}
+              style={styles.radioButtonContainer}
+            >
+              <View style={styles.radioButton}>
+                <RadioButton.Item 
+                  label="short rest"
+                  value={true}
+                  status={isShortRest === true ? 'checked' : 'unchecked'}
+                  color={theme.colors.primary}
+                  />
+              </View>
+              <View style={styles.radioButton}>
+                <RadioButton.Item
+                  label="long rest"
+                  value={false}
+                  status={isShortRest === false ? 'checked' : 'unchecked'}
+                  color={theme.colors.primary}
+                  />
+              </View>
+            </RadioButton.Group>
+          </View>
+          
+          <View style={styles.summary}>
+            <Subheading>nowa umiejętność:</Subheading>
+            <Text style={styles.description}>nazwa: <Subheading>{name}</Subheading></Text>
+            <Text style={styles.description}>liczba użyć: <Subheading>{maxSlots}</Subheading></Text>
+            <Text style={styles.description}>rodzaj: <Subheading>
+                {isShortRest ? "short rest" : "long rest"}
+            </Subheading></Text>
+          </View>
 
-          <Text>nowa umiejętność:</Text>
-          <Text>nazwa: {name}</Text>
-          <Text>liczba użyć: {maxSlots}</Text>
-          <Text>rodzaj: {isShortRest ? "short rest" : "long rest"}</Text>
           <Button 
+            mode="contained"
+            style={styles.button}
+            onPress={() => {
+              if (name===""){
+                alert("nazwa nie moze być pusta")
+              } else if (props.abilities.find(ability => ability.name === name)) {
+                alert("nazwa nie moze się powtarzać")
+              } else if (maxSlots === 0) {
+                alert("liczba musi być większa niż 0 (i musi być cyfrą)")
+              } else {
+                props.addAbility(name, maxSlots, isShortRest);
+                setName("");
+                setMaxSlots('');
+                setIfShortRest(false);
+              }
+            }}
+          >
+            dodaj
+          </Button>
+          <Button 
+            mode="contained"
+            style={styles.button}
             onPress={() => props.closeModal()}
-            title="anuluj"
-          />
-          <Button 
-          title="dodaj"
-          onPress={() => {
-            if (name===""){
-              alert("nazwa nie moze być pusta")
-            } else if (props.abilities.find(ability => ability.name === name)) {
-              alert("nazwa nie moze się powtarzać")
-            } else if (maxSlots === 0) {
-              alert("liczba musi być większa niż 0 (i musi być cyfrą)")
-            } else {
-              props.addAbility(name, maxSlots, isShortRest);
-              setName("");
-              setMaxSlots('');
-              setIfShortRest(false);
-            }
-          }}
-          />
+          >
+            anuluj
+          </Button>
         </View>
       </Modal>
     </View>
@@ -228,9 +239,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 30,
   },
-  radioButton: {
-    flexWrap: 'wrap', 
+  radioButtonContainer: {
+    // backgroundColor: 'red',
     flexDirection: 'row',
-    alignContent: 'flex-end'
+  },
+  radioButton: {
+    width: '50%',
+  },
+  button: {
+    margin: 5,
+  },
+  summary: {
+    marginTop: 10,
+    marginBottom: 10,
+    padding: 5,
+    borderTopWidth: 2,
+    borderTopColor: theme.colors.primary,
+  },
+  description: {
+    color: theme.colors.gray,
   }
 });
