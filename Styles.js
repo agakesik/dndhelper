@@ -1,4 +1,6 @@
+// import React from 'react';
 import { DefaultTheme } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
 
 export const theme = {
   ...DefaultTheme,
@@ -12,3 +14,18 @@ export const theme = {
 
   },
 }
+
+export const styles = StyleSheet.create({
+  abilitiesView: {
+    marginBottom: 2,
+  },
+  controllerMenu: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    padding: 5,
+  },
+  controllerButton: {
+    minWidth: '50%', 
+    borderRadius: 20,
+  },
+});

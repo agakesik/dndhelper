@@ -82,7 +82,7 @@ export default function App () {
         abilities={abilities}
         changeAbilities={(changedAbilities) => changeAbilities(changedAbilities)}
         openAddModal={() => toggleAddModal(true)}
-        openManadeModal={() => toggleManageModal(true)}
+        openManageModal={() => toggleManageModal(true)}
       />
     </>
   )
