@@ -12,13 +12,13 @@ export default function AllModals(props) {
       <AddAbility 
         abilities={props.abilities}
         modalVisible={props.addAbilityModalVisible}
-        closeModal={() => props.closeAddAbilityModal()}
+        closeModal={() => props.toggleAddModal(false)}
         addAbility={(name, maxSlots, isShortRest) => props.addAbility(name, maxSlots, isShortRest)}
       />
       <ManageAbilities 
         abilities={props.abilities}
         modalVisible={props.manageAbilitiesModalVisible}
-        closeModal={() => props.closeManageAbilitiesModal()}
+        closeModal={() => props.toggleManageModal(false)}
         deleteAbility={(i) => props.deleteAbility(i)}
         moveUp={(i) => props.moveUp(i)}
         moveDown={(i) => props.moveDown(i)}

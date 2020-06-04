@@ -46,34 +46,34 @@ export default class CopyApp extends Component {
   }
 
   useSlot(i) {
-    let abilities = this.state.abilities.slice();
+    let abilities = this.props.abilities.slice();
     if(abilities[i].usedSlots < abilities[i].maxSlots) {
       abilities[i].usedSlots = abilities[i].usedSlots + 1;
-      this.setState({abilities: abilities})
-      this.saveState()
+      this.props.changeAbilities(abilities)
+      // this.saveState()
     } else {
       alert('NO MORE SLOTS :c');
     }
   };
 
   clearSlot (i) {
-    let abilities = this.state.abilities.slice();
+    let abilities = this.props.abilities.slice();
     if(abilities[i].usedSlots > 0) {
       abilities[i].usedSlots = abilities[i].usedSlots - 1;
-      this.setState({abilities: abilities})
-      this.saveState()
+      this.props.changeAbilities(abilities)
+      // this.saveState()
     } else {
       alert('SLOTS FULL c:');
     }
   };
 
   longRest() {
-    let abilities = this.state.abilities.slice();
+    let abilities = this.props.abilities.slice();
     for (let i=0; i<abilities.length; i++){
       abilities[i].usedSlots = 0
     }
-    this.setState({abilities: abilities})
-    this.saveState()
+    this.props.changeAbilities(abilities)
+    // this.saveState()
   }
 
   shortRest() {
@@ -83,29 +83,29 @@ export default class CopyApp extends Component {
         abilities[i].usedSlots = 0
       }
     }
-    this.setState({abilities: abilities})
-    this.saveState()
+    this.props.changeAbilities(abilities)
+    // this.saveState()
   }
 
-  addAbility(name, maxSlots, isShortRest) {
-    let abilities =this.state.abilities.slice();
-    let newAbility = { name: name, maxSlots: maxSlots, usedSlots: 0, shortRest: isShortRest}
-    this.setState({ 
-      abilities: abilities.concat(newAbility),
-    });
-    this.saveState()
-    this.props.toggleAddModal(false)
-  }
+  // addAbility(name, maxSlots, isShortRest) {
+  //   let abilities =this.props.abilities.slice();
+  //   let newAbility = { name: name, maxSlots: maxSlots, usedSlots: 0, shortRest: isShortRest}
+  //   this.setState({ 
+  //     abilities: abilities.concat(newAbility),
+  //   });
+  //   this.saveState()
+  //   this.props.toggleAddModal(false)
+  // }
 
-  deleteAbility(i) {
-    let abilitiesAfterDeleting = this.state.abilities.filter((ability, j) => {
-      if (i !== j) { return ability }
-    });
-    this.setState({
-      abilities: abilitiesAfterDeleting
-    });
-    this.saveState()
-  }
+  // deleteAbility(i) {
+  //   let abilitiesAfterDeleting = this.state.abilities.filter((ability, j) => {
+  //     if (i !== j) { return ability }
+  //   });
+  //   this.setState({
+  //     abilities: abilitiesAfterDeleting
+  //   });
+  //   this.saveState()
+  // }
 
   moveUp(i) {
     let abilities = this.state.abilities.slice()
@@ -125,23 +125,23 @@ export default class CopyApp extends Component {
     this.saveState()
   }
 
-  editAbility(i, name, maxSlots, shortRest) {
-    let abilities = this.state.abilities.slice()
-    if (name) {abilities[i].name = name}
-    if (maxSlots) {abilities[i].maxSlots = maxSlots}
-    if (shortRest!== null) {abilities[i].shortRest = shortRest}
-    this.setState({abilities: abilities})
-    this.saveState()
-  }
+  // editAbility(i, name, maxSlots, shortRest) {
+  //   let abilities = this.state.abilities.slice()
+  //   if (name) {abilities[i].name = name}
+  //   if (maxSlots) {abilities[i].maxSlots = maxSlots}
+  //   if (shortRest!== null) {abilities[i].shortRest = shortRest}
+  //   this.setState({abilities: abilities})
+  //   this.saveState()
+  // }
 
   render() {  
     return (
       <PaperProvider style={{flex: 1}} theme={theme}>
-        <AllModals 
+        {/* <AllModals 
           abilities={this.state.abilities}
           addAbilityModalVisible={this.props.addAbilityModalVisible}
           closeAddAbilityModal={() => this.props.toggleAddModal(false)}
-          addAbility={(name, maxSlots, isShortRest) => this.addAbility(name, maxSlots, isShortRest)}
+          addAbility={(name, maxSlots, isShortRest) => this.props.addAbility(name, maxSlots, isShortRest)}
           manageAbilitiesModalVisible={this.props.manageAbilitiesModalVisible}
           closeManageAbilitiesModal={() => this.props.toggleManageModal(false)}
           deleteAbility={(i) => this.deleteAbility(i)}
@@ -150,10 +150,10 @@ export default class CopyApp extends Component {
           editAbilityModalVisible={this.props.editAbilityModalVisible}
           toggleEditModal={(bool) => this.props.toggleEditModal(bool)}
           editAbility={(i, name, maxSlots, isShortRest) => this.editAbility(i, name, maxSlots, isShortRest)}
-        />
+        /> */}
         <ScrollView style={styles.abilitiesView}>
           <Abilities 
-            abilities={this.state.abilities}
+            abilities={this.props.abilities}
             onPress={(i) => this.useSlot(i)}
             onLongPress={(i) => this.clearSlot(i)}
             viewCompact={this.props.compactView}
@@ -177,13 +177,13 @@ export default class CopyApp extends Component {
         </View>
         <View style={styles.controllerMenu}>
           <Button
-            onPress={() => this.props.toggleAddModal(true)}
+            onPress={() => this.props.openAddModal()}
             style={styles.controllerButton}
             >
             dodaj
           </Button>
           <Button 
-            onPress={() => this.props.toggleManageModal(true)}
+            onPress={() => this.props.openManadeModal()}
             style={styles.controllerButton}
             >
             edytuj / usuń

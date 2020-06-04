@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, TouchableHighlight } from 'react-native';
 import { theme } from './Styles.js'
-import { Surface, Title } from 'react-native-paper';
+import { Surface, Title, Text } from 'react-native-paper';
 
 export default function Abilities(props) {
   const abilities = props.abilities
@@ -40,6 +40,7 @@ function Ability(props) {
       >
         <Surface style={{borderRadius: 5}}>
           <Title style={styles.abilityDescription}>{props.name}</Title>
+          <Text>{props.usedSlots}/{props.maxSlots}</Text>
           <View style={styles.row}>
             <AllSlots
               maxSlots={maxSlots}
