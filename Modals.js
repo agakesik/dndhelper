@@ -6,6 +6,31 @@ import { RadioButton, TextInput, Text, Subheading, Button, Headline } from 'reac
 import { theme } from './Styles.js'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+export default function AllModals(props) {
+  return (
+    <View>
+      <AddAbility 
+        abilities={props.abilities}
+        modalVisible={props.addAbilityModalVisible}
+        closeModal={() => props.closeAddAbilityModal()}
+        addAbility={(name, maxSlots, isShortRest) => props.addAbility(name, maxSlots, isShortRest)}
+      />
+      <ManageAbilities 
+        abilities={props.abilities}
+        modalVisible={props.manageAbilitiesModalVisible}
+        closeModal={() => props.closeManageAbilitiesModal()}
+        deleteAbility={(i) => props.deleteAbility(i)}
+        moveUp={(i) => props.moveUp(i)}
+        moveDown={(i) => props.moveDown(i)}
+        editAbilityModalVisible={props.editAbilityModalVisible}
+        openEditModal={() => props.toggleEditModal(true)}
+        closeEditModal={() => props.toggleEditModal(false)}
+        editAbility={(i, name, maxSlots, isShortRest) => props.editAbility(i, name, maxSlots, isShortRest)}
+      />
+    </View>
+  )
+}
+
 export function AddAbility(props) {
   const [name, setName] = useState('');
   const [maxSlots, setMaxSlots] = useState(0);
@@ -172,7 +197,7 @@ export function ManageAbilities(props) {
               title="edytuj"
               onPress={() => {
                 if (abilityNumber || abilityNumber === 0) {
-                  props.openEdit()}
+                  props.openEditModal()}
                 }}
                 color={theme.colors.background}
                 style={styles.controllerButton}
