@@ -43,47 +43,17 @@ export default class CopyApp extends Component {
     }
   }
 
-  useSlot(i) {
-    let abilities = this.props.abilities.slice();
-    if(abilities[i].usedSlots < abilities[i].maxSlots) {
-      abilities[i].usedSlots = abilities[i].usedSlots + 1;
-      this.props.changeAbilities(abilities)
-      // this.saveState()
-    } else {
-      alert('NO MORE SLOTS :c');
-    }
-  };
 
-  clearSlot (i) {
-    let abilities = this.props.abilities.slice();
-    if(abilities[i].usedSlots > 0) {
-      abilities[i].usedSlots = abilities[i].usedSlots - 1;
-      this.props.changeAbilities(abilities)
-      // this.saveState()
-    } else {
-      alert('SLOTS FULL c:');
-    }
-  };
-
-  longRest() {
-    let abilities = this.props.abilities.slice();
-    for (let i=0; i<abilities.length; i++){
-      abilities[i].usedSlots = 0
-    }
-    this.props.changeAbilities(abilities)
-    // this.saveState()
-  }
-
-  shortRest() {
-    let abilities = this.props.abilities.slice();
-    for (let i=0; i<abilities.length; i++){
-      if(abilities[i].shortRest){
-        abilities[i].usedSlots = 0
-      }
-    }
-    this.props.changeAbilities(abilities)
-    // this.saveState()
-  }
+  // shortRest() {
+  //   let abilities = this.props.abilities.slice();
+  //   for (let i=0; i<abilities.length; i++){
+  //     if(abilities[i].shortRest){
+  //       abilities[i].usedSlots = 0
+  //     }
+  //   }
+  //   this.props.changeAbilities(abilities)
+  //   // this.saveState()
+  // }
 
   render() {  
     return (
@@ -91,14 +61,14 @@ export default class CopyApp extends Component {
         <ScrollView style={styles.abilitiesView}>
           <Abilities 
             abilities={this.props.abilities}
-            onPress={(i) => this.useSlot(i)}
-            onLongPress={(i) => this.clearSlot(i)}
+            onPress={(i) => this.props.useSlot(i)}
+            onLongPress={(i) => this.props.clearSlot(i)}
             viewCompact={this.props.compactView}
           />
         </ScrollView>
         <MainViewButton
-          shortRest={() => this.shortRest()}
-          longRest={() => this.longRest()}
+          shortRest={() => this.props.shortRest()}
+          longRest={() => this.props.longRest()}
           openAddModal={() => this.props.openAddModal()}
           openManageModal={() => this.props.openManageModal()}
         />

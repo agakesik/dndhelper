@@ -11,11 +11,13 @@ export default function App () {
 
   const [abilities, changeAbilities] = React.useState([
     {name: "Zaklęcia level 1", maxSlots: 4, usedSlots: 2, shortRest: false},
+    {name: "coś tam", maxSlots: 2, usedSlots: 1, shortRest: true},
     {name: "Zaklęcia level 2", maxSlots: 3, usedSlots: 1, shortRest: false}
   ])
 
+  // Functions to menage Abilities: add/edit/delete
+
   const addAbility = (name, maxSlots, isShortRest) => {
-    // let abilities =abilities.slice();
     let newAbility = { name: name, maxSlots: maxSlots, usedSlots: 0, shortRest: isShortRest}
     changeAbilities(abilities => [...abilities, newAbility]);
     // this.saveState()
@@ -40,20 +42,64 @@ export default function App () {
   }
 
   const moveUp = (i) => {
-    let newAbilities = abilities.slice()
-    let temp = newAbilities[i-1]
-    newAbilities[i-1] = newAbilities[i]
-    newAbilities[i] = temp
-    changeAbilities(newAbilities)
+    let changedAbilities = abilities.slice()
+    let temp = changedAbilities[i-1]
+    changedAbilities[i-1] = changedAbilities[i]
+    changedAbilities[i] = temp
+    changeAbilities(changedAbilities)
     // this.saveState()
   }
 
   const moveDown = (i) => {
-    let newAbilities = abilities.slice()
-    let temp = newAbilities[i+1]
-    newAbilities[i+1] = newAbilities[i]
-    newAbilities[i] = temp
-    changeAbilities(newAbilities)
+    let changedAbilities = abilities.slice()
+    let temp = changedAbilities[i+1]
+    changedAbilities[i+1] = changedAbilities[i]
+    changedAbilities[i] = temp
+    changeAbilities(changedAbilities)
+    // this.saveState()
+  }
+  
+  // functions that change the state of Abilities 
+
+  const useSlot = (i) => {
+    let changedAbilities = abilities.slice();
+    if(changedAbilities[i].usedSlots < changedAbilities[i].maxSlots) {
+      changedAbilities[i].usedSlots = changedAbilities[i].usedSlots + 1;
+      changeAbilities(changedAbilities)
+      // this.saveState()
+    } else {
+      alert('NO MORE SLOTS :c');
+    }
+  };
+
+  const clearSlot = (i) => {
+    let changedAbilities = abilities.slice();
+    if(changedAbilities[i].usedSlots > 0) {
+      changedAbilities[i].usedSlots = changedAbilities[i].usedSlots - 1;
+      changeAbilities(changedAbilities)
+      // this.saveState()
+    } else {
+      alert('SLOTS FULL c:');
+    }
+  };
+
+  const longRest = () => {
+    let changedAbilities = abilities.slice();
+    for (let i=0; i<changedAbilities.length; i++){
+      changedAbilities[i].usedSlots = 0
+    }
+    changeAbilities(changedAbilities)
+    // this.saveState()
+  }
+
+  const shortRest = () => {
+    let changedAbilities = abilities.slice();
+    for (let i=0; i<changedAbilities.length; i++){
+      if(changedAbilities[i].shortRest){
+        changedAbilities[i].usedSlots = 0
+      }
+    }
+    changeAbilities(changedAbilities)
     // this.saveState()
   }
 
@@ -83,6 +129,10 @@ export default function App () {
         changeAbilities={(changedAbilities) => changeAbilities(changedAbilities)}
         openAddModal={() => toggleAddModal(true)}
         openManageModal={() => toggleManageModal(true)}
+        useSlot={(i) => useSlot(i)}
+        clearSlot={(i) => clearSlot(i)}
+        longRest={() => longRest()}
+        shortRest={() => shortRest()}
       />
     </>
   )
