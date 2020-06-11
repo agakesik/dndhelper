@@ -16,6 +16,11 @@ export const theme = {
 }
 
 export const styles = StyleSheet.create({
+  // General
+  backgroundText: {
+    color: theme.colors.gray,
+  },
+
   // Buttons
   controllerMenu: {
     flexDirection: 'row',
@@ -63,4 +68,37 @@ export const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },
+
+  // Modals
+  modalContainer:{
+    backgroundColor: '#fff',
+    padding: 5,
+    maxHeight: '90%'
+  },
+  radioButtonContainer: {
+    flexDirection: 'row',
+  },
+  radioButton: {
+    width: '50%',
+  },
+  modalSummary: {
+    marginTop: 10,
+    marginBottom: 10,
+    padding: 5,
+    borderTopWidth: 2,
+    borderTopColor: theme.colors.primary,
+  },
+  button: {
+    margin: 5,
+  },
+  abilitiesList: {
+    padding: 10,
+  },
+  abilityRow: {
+    flexDirection: 'row', 
+    justifyContent: "flex-end",
+    alignItems: 'center',
+    padding: 5,
+  },
+
 });
