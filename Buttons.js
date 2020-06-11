@@ -39,3 +39,15 @@ export default function MainViewButtons(props) {
     </View>
   );
 }
+
+export function SingleControllerButton(props) {
+  return (
+    <Button 
+      mode={props.modeContained ? "contained" : ""}
+      style={styles.button}
+      onPress={() => props.onPress()}
+    >
+      {props.label}
+    </Button>
+  )
+}

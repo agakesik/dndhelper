@@ -1,26 +1,11 @@
 
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import Modal from 'react-native-modal';
 import { RadioButton, TextInput, Text, Subheading, Button, Headline } from 'react-native-paper'
 import { theme, styles } from './Styles.js'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-function MyModal(props) {
-  return(
-    <View>
-      <Modal
-        isVisible={props.modalVisible}
-        onRequestClose={() => props.closeModal()}
-      >
-        <View style={styles.modalContainer}>
-          <Headline style={{marginBottom: 15}}>{props.title}</Headline>
-          {props.children}
-        </View>
-      </Modal>
-    </View>
-  )
-}
+import { SingleControllerButton } from './Buttons'
 
 export default function AllModals(props) {
   return (
@@ -47,10 +32,25 @@ export default function AllModals(props) {
   )
 }
 
-export function AddAbility(props) {
+function AddAbility(props) {
   const [name, setName] = useState('');
   const [maxSlots, setMaxSlots] = useState(0);
   const [isShortRest, setIfShortRest] = useState(false);
+
+  const addAbility = () => {
+    if (name===""){
+      alert("nazwa nie moze być pusta")
+    } else if (props.abilities.find(ability => ability.name === name)) {
+      alert("nazwa nie moze się powtarzać")
+    } else if (maxSlots === 0) {
+      alert("liczba musi być większa niż 0 (i musi być cyfrą)")
+    } else {
+      props.addAbility(name, maxSlots, isShortRest);
+      setName("");
+      setMaxSlots('');
+      setIfShortRest(false);
+    }
+  }
 
   return(
     <MyModal {...props} title="Dodaj nową umiejętność">
@@ -71,30 +71,12 @@ export function AddAbility(props) {
         }
         style={{height: 40}}
       />
-      <View style={styles.radioButtonContainer}>
-        <RadioButton.Group
-          onValueChange={value => setIfShortRest(value)}
-          style={styles.radioButtonContainer}
-        >
-          <View style={styles.radioButton}>
-            <RadioButton.Item 
-              label="short rest"
-              value={true}
-              status={isShortRest === true ? 'checked' : 'unchecked'}
-              color={theme.colors.primary}
-              />
-          </View>
-          <View style={styles.radioButton}>
-            <RadioButton.Item
-              label="long rest"
-              value={false}
-              status={isShortRest === false ? 'checked' : 'unchecked'}
-              color={theme.colors.primary}
-              />
-          </View>
-        </RadioButton.Group>
-      </View>
       
+      <ShortOrLongRestRadioButton
+        isShortRest={isShortRest}
+        setIfShortRest={(value) => setIfShortRest(value)}
+      />
+
       <View style={styles.modalSummary}>
         <Subheading>nowa umiejętność:</Subheading>
         <Text style={styles.backgroundText}>nazwa: <Subheading>{name}</Subheading></Text>
@@ -104,43 +86,34 @@ export function AddAbility(props) {
         </Subheading></Text>
       </View>
 
-      <Button 
-        mode="contained"
-        style={styles.button}
-        onPress={() => {
-          if (name===""){
-            alert("nazwa nie moze być pusta")
-          } else if (props.abilities.find(ability => ability.name === name)) {
-            alert("nazwa nie moze się powtarzać")
-          } else if (maxSlots === 0) {
-            alert("liczba musi być większa niż 0 (i musi być cyfrą)")
-          } else {
-            props.addAbility(name, maxSlots, isShortRest);
-            setName("");
-            setMaxSlots('');
-            setIfShortRest(false);
-          }
-        }}
-      >
-        dodaj
-      </Button>
-      <Button 
-        // mode="contained"
-        style={styles.button}
+      <SingleControllerButton
+        modeContained={true}
+        onPress={() => addAbility()}
+        label="dodaj"
+      />
+      <SingleControllerButton
         onPress={() => props.closeModal()}
-      >
-        anuluj
-      </Button>
+        label="zakmnij"
+      />
     </MyModal>
   );
 }
 
-export function ManageAbilities(props) {
+function ManageAbilities(props) {
   const abilities = props.abilities
   const [abilityNumber, chooseAbility] = useState()
+
+  const closeModal = () => {
+    props.closeModal()
+    chooseAbility(null)
+  }
   
   return (
-    <MyModal {...props} title="Edytuj umiejętności">
+    <MyModal 
+      {...props} 
+      closeModal={() => closeModal()}
+      title="Zarządzaj umiejetnościami"
+    >
       <EditAbility
           modalVisible={props.editAbilityModalVisible}
           closeModal={() => props.closeEditModal()}
@@ -182,9 +155,9 @@ export function ManageAbilities(props) {
           </View>
         ))}
       </ScrollView>
+      
       <View style={[styles.controllerMenu, {backgroundColor: theme.colors.primary, marginTop: 10, marginBottom: 5}]}>
         <Button 
-          title="usuń"
           onPress={() => {
             props.deleteAbility(abilityNumber)
             chooseAbility(null)
@@ -208,25 +181,29 @@ export function ManageAbilities(props) {
           edytuj
         </Button>
       </View>
-      <Button 
-        onPress={() => {
-          props.closeModal()
-          chooseAbility(null)
-        }}
-        style={styles.controllerButton}
-      >
-        zamknij
-      </Button>
+      
+      <SingleControllerButton
+        label="zamknij"
+        onPress={() => closeModal()}
+      />
     </MyModal>
   )
 }
 
-export function EditAbility(props) {
+function EditAbility(props) {
   const ability = props.ability || {name: "", maxSlots: '', shortRest: false}
   
   const [name, setName] = useState(null);
   const [maxSlots, setMaxSlots] = useState(null);
   const [isShortRest, setIfShortRest] = useState(null);
+
+  const editAbility = () => {
+    props.editAbility(name, maxSlots, isShortRest)
+    props.closeModal()
+    setName(null);
+    setMaxSlots(null);
+    setIfShortRest(null);
+  }
 
   return(
     <MyModal {...props} title={"Edytuj " + ability.name}> 
@@ -240,46 +217,67 @@ export function EditAbility(props) {
         value={maxSlots}
         onChangeText={text => setMaxSlots(text)}
       />
-      <View style={styles.radioButtonContainer}>
+
+      <ShortOrLongRestRadioButton
+        isShortRest={isShortRest}
+        setIfShortRest={(value) => setIfShortRest(value)}
+        currentIsShortRest={ability.shortRest}
+        editing={true}
+      />
+
+      <SingleControllerButton
+        onPress={() => editAbility()}
+        label="edytuj"
+        modeContained={true}
+      />
+      <SingleControllerButton
+        onPress={() => props.closeModal()}
+        label="anuluj"
+      />
+    </MyModal>
+  )
+}
+
+function MyModal(props) {
+  return(
+    <View>
+      <Modal
+        isVisible={props.modalVisible}
+        onRequestClose={() => props.closeModal()}
+      >
+        <View style={styles.modalContainer}>
+          <Headline style={{marginBottom: 15}}>{props.title}</Headline>
+          {props.children}
+        </View>
+      </Modal>
+    </View>
+  )
+}
+
+function ShortOrLongRestRadioButton(props) {
+  return (
+    <View style={styles.radioButtonContainer}>
         <RadioButton.Group
-          onValueChange={value => setIfShortRest(value)}
+          onValueChange={value => props.setIfShortRest(value)}
         >
           <View style={styles.radioButton}>
             <RadioButton.Item 
-              label={(ability.shortRest ? "-> " : "    ") + "short rest"}
+              label={(props.currentIsShortRest ? "-> " : "    ") + "short rest"}
               value={true}
-              status={isShortRest === true ? 'checked' : 'unchecked'}
+              status={props.isShortRest === true ? 'checked' : 'unchecked'}
               color={theme.colors.primary}
               />
           </View>
           <View style={styles.radioButton}>
             <RadioButton.Item
-              label={(ability.shortRest ? "    " : "-> ") + "long rest"}
+              label={
+                (props.editing ? (props.currentIsShortRest ? "    " : "-> ") : "    ") + "long rest"}
               value={false}
-              status={isShortRest === false ? 'checked' : 'unchecked'}
+              status={props.isShortRest === false ? 'checked' : 'unchecked'}
               color={theme.colors.primary}
               />
           </View>
         </RadioButton.Group>
       </View>
-      <Button 
-        onPress={() => {
-          props.editAbility(name, maxSlots, isShortRest)
-          props.closeModal()
-          setName(null);
-          setMaxSlots(null);
-          setIfShortRest(null);
-        }}
-        // style={{marginTop: 10}}
-        mode="contained"
-      >
-        edytuj
-      </Button>
-      <Button 
-        onPress={() => {props.closeModal()}}
-      >
-        anuluj
-      </Button>
-    </MyModal>
   )
 }

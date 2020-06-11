@@ -31,6 +31,9 @@ export const styles = StyleSheet.create({
     minWidth: '50%', 
     borderRadius: 20,
   },
+  button: {
+    margin: 5,
+  },
 
   // Settings
   settingsDescription: {
@@ -87,9 +90,6 @@ export const styles = StyleSheet.create({
     padding: 5,
     borderTopWidth: 2,
     borderTopColor: theme.colors.primary,
-  },
-  button: {
-    margin: 5,
   },
   abilitiesList: {
     padding: 10,
