@@ -141,7 +141,7 @@ export default function App () {
   }
 
   return(
-    <PaperProvider style={{flex: 1}} theme={theme}>
+    <PaperProvider theme={theme}>
       <CompactView 
         compactView={compactView}
         toggleCompactView={() => changeAndSaveSetting(!compactView)}

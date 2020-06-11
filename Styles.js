@@ -16,9 +16,7 @@ export const theme = {
 }
 
 export const styles = StyleSheet.create({
-  abilitiesView: {
-    marginBottom: 2,
-  },
+  // Buttons
   controllerMenu: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
@@ -27,5 +25,42 @@ export const styles = StyleSheet.create({
   controllerButton: {
     minWidth: '50%', 
     borderRadius: 20,
+  },
+
+  // Settings
+  settingsDescription: {
+    alignSelf: 'center', 
+    fontSize: 12
+  },
+  compactViewToggle: {
+    flexDirection: 'row', 
+    justifyContent: 'flex-end'
+  },
+
+  // Abilities
+  abilitiesViewCompact: {
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+  },
+  singleAbility: {
+    margin: 10,
+    elevation: 2,
+  },
+  singleAbilityBorderRadius: {
+    borderRadius: 5,
+  },
+  abilityDescription: {
+    padding: 10,
+    paddingBottom: 0,
+  },
+  singularSlot: {
+    margin: 10,
+    height: 20,
+    width: 20,
+    borderWidth: 2,
+    borderColor: theme.colors.primary,
+  },
+  row: {
+    flexDirection: 'row',
   },
 });

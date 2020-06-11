@@ -1,25 +1,27 @@
-
-import React, { useState } from 'react'
-import { StyleSheet, View, TouchableHighlight } from 'react-native';
-import { theme } from './Styles.js'
-import { Surface, Title, Text } from 'react-native-paper';
+import React from 'react'
+import { View, TouchableHighlight, ScrollView } from 'react-native';
+import { theme, styles } from './Styles.js'
+import { Surface, Title } from 'react-native-paper';
 
 export default function Abilities(props) {
   const abilities = props.abilities
+
   return (
-    <View style={ props.viewCompact ? styles.abilities : {} }>
-      {abilities.map((ability, i) => (
-        <Ability
-          name={ability.name}
-          maxSlots={ability.maxSlots}
-          usedSlots={ability.usedSlots}
-          shortRest={ability.shortRest}
-          onPress={() => props.onPress(i)}
-          onLongPress={() => props.onLongPress(i)}
-          key={ability.name}
-        />
-      ))}
-    </View>
+    <ScrollView>
+      <View style={ props.viewCompact ? styles.abilitiesViewCompact : {} }>
+        {abilities.map((ability, i) => (
+          <Ability
+            name={ability.name}
+            maxSlots={ability.maxSlots}
+            usedSlots={ability.usedSlots}
+            shortRest={ability.shortRest}
+            onPress={() => props.onPress(i)}
+            onLongPress={() => props.onLongPress(i)}
+            key={ability.name}
+          />
+        ))}
+      </View>
+    </ScrollView>
   )
 }
 
@@ -34,20 +36,17 @@ function Ability(props) {
         onPress={() => props.onPress()}
         onLongPress={() => props.onLongPress()}
         underlayColor={theme.colors.accent}
-        style={[styles.ability, {
+        style={[styles.singleAbility, styles.singleAbilityBorderRadius, {
           opacity: (usedSlots==maxSlots) ? 0.3 : 1,
         }]}
       >
-        <Surface style={{borderRadius: 5}}>
+        <Surface style={styles.singleAbilityBorderRadius}>
           <Title style={styles.abilityDescription}>{props.name}</Title>
-          <Text>{props.usedSlots}/{props.maxSlots}</Text>
-          <View style={styles.row}>
-            <AllSlots
-              maxSlots={maxSlots}
-              usedSlots={usedSlots}
-              shortRest={shortRest}
-            />
-          </View>
+          <AllSlots
+            maxSlots={maxSlots}
+            usedSlots={usedSlots}
+            shortRest={shortRest}
+          />
         </Surface>
       </TouchableHighlight>
     </View>
@@ -67,46 +66,22 @@ function AllSlots(props) {
     slots.push(isUsed);
   }
   return (
-    slots.map((isUsed, i) =>
-    <SingleSlot isUsed={isUsed} shortRest={shortRest} key={i} />)
-    );
-  }
+    <View style={styles.row}>
+      {slots.map((isUsed, i) =>
+        <SingleSlot isUsed={isUsed} shortRest={shortRest} key={i} />
+      )}
+    </View>
+  );
+}
 
   function SingleSlot(props) {
     return (
       <View style={[
-        styles.slot,
-        { backgroundColor: props.isUsed ? theme.colors.primary : "white" },
-        { borderRadius: props.shortRest ? 10 : 1 },
+        styles.singularSlot, {
+          backgroundColor: props.isUsed ? theme.colors.primary : "white",
+          borderRadius: props.shortRest ? 10 : 1,
+        }
       ]} />
     );
   }
   
-  const styles = StyleSheet.create({
-    abilities: {
-     flexWrap: 'wrap',
-     flexDirection: 'row',
-     justifyContent: 'space-between' 
-    },
-    blank: {
-    },
-    ability: {
-      margin: 10,
-      elevation: 2,
-      borderRadius: 5,
-    },
-    abilityDescription: {
-      padding: 10,
-      paddingBottom: 0,
-    },
-    slot: {
-      margin: 10,
-      height: 20,
-      width: 20,
-      borderWidth: 2,
-      borderColor: theme.colors.primary,
-    },
-    row: {
-      flexDirection: 'row',
-    }
-});
