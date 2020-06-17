@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 import { RadioButton, TextInput, Text, Subheading, Button, Headline } from 'react-native-paper'
 import { theme, styles } from './Styles.js'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { SingleControllerButton } from './Buttons'
+import { SingleMenuButton, DoubleControllerButtons } from './Buttons'
 
 export default function AllModals(props) {
   return (
@@ -86,12 +86,12 @@ function AddAbility(props) {
         </Subheading></Text>
       </View>
 
-      <SingleControllerButton
+      <SingleMenuButton
         modeContained={true}
         onPress={() => addAbility()}
         label="dodaj"
       />
-      <SingleControllerButton
+      <SingleMenuButton
         onPress={() => props.closeModal()}
         label="zakmnij"
       />
@@ -156,33 +156,22 @@ function ManageAbilities(props) {
         ))}
       </ScrollView>
       
-      <View style={[styles.controllerMenu, {backgroundColor: theme.colors.primary, marginTop: 10, marginBottom: 5}]}>
-        <Button 
-          onPress={() => {
-            props.deleteAbility(abilityNumber)
-            chooseAbility(null)
-          }}
-          color={theme.colors.background}
-          style={styles.controllerButton}
-
-        >
-          usuń
-        </Button>
-        <Button 
-          title="edytuj"
-          onPress={() => {
-            if (abilityNumber || abilityNumber === 0) {
-              props.openEditModal()}
-            }}
-            color={theme.colors.background}
-            style={styles.controllerButton}
-
-        >
-          edytuj
-        </Button>
-      </View>
+      <DoubleControllerButtons 
+        modeContained={true}
+        firstButtonLabel="usuń"
+        firstButtonOnPress={() => {
+          props.deleteAbility(abilityNumber)
+          chooseAbility(null)
+        }}
+        secondButtonLabel="edytuj"
+        secondButtonOnPress={() => {
+          if (abilityNumber || abilityNumber === 0) {
+            props.openEditModal()
+          }
+        }}
+      />
       
-      <SingleControllerButton
+      <SingleMenuButton
         label="zamknij"
         onPress={() => closeModal()}
       />
@@ -225,12 +214,12 @@ function EditAbility(props) {
         editing={true}
       />
 
-      <SingleControllerButton
+      <SingleMenuButton
         onPress={() => editAbility()}
         label="edytuj"
         modeContained={true}
       />
-      <SingleControllerButton
+      <SingleMenuButton
         onPress={() => props.closeModal()}
         label="anuluj"
       />
@@ -257,27 +246,28 @@ function MyModal(props) {
 function ShortOrLongRestRadioButton(props) {
   return (
     <View style={styles.radioButtonContainer}>
-        <RadioButton.Group
-          onValueChange={value => props.setIfShortRest(value)}
-        >
-          <View style={styles.radioButton}>
-            <RadioButton.Item 
-              label={(props.currentIsShortRest ? "-> " : "    ") + "short rest"}
-              value={true}
-              status={props.isShortRest === true ? 'checked' : 'unchecked'}
-              color={theme.colors.primary}
-              />
-          </View>
-          <View style={styles.radioButton}>
-            <RadioButton.Item
-              label={
-                (props.editing ? (props.currentIsShortRest ? "    " : "-> ") : "    ") + "long rest"}
-              value={false}
-              status={props.isShortRest === false ? 'checked' : 'unchecked'}
-              color={theme.colors.primary}
-              />
-          </View>
-        </RadioButton.Group>
-      </View>
+      <RadioButton.Group
+        onValueChange={value => props.setIfShortRest(value)}
+      >
+        <View style={styles.radioButton}>
+          <RadioButton.Item 
+            label={(props.currentIsShortRest ? "-> " : "    ") + "short rest"}
+            value={true}
+            status={props.isShortRest === true ? 'checked' : 'unchecked'}
+            color={theme.colors.primary}
+            />
+        </View>
+        <View style={styles.radioButton}>
+          <RadioButton.Item
+            label={ 
+              (props.editing ? (props.currentIsShortRest ? "    " : "-> ") : "    ") + "long rest"
+            }
+            value={false}
+            status={props.isShortRest === false ? 'checked' : 'unchecked'}
+            color={theme.colors.primary}
+            />
+        </View>
+      </RadioButton.Group>
+    </View>
   )
 }

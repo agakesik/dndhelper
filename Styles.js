@@ -22,16 +22,18 @@ export const styles = StyleSheet.create({
   },
 
   // Buttons
-  controllerMenu: {
+  buttonWrapper: {
+    marginTop: 5,
+  },
+  doubleButtonWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    padding: 5,
   },
-  controllerButton: {
+  doubleButton: {
     minWidth: '50%', 
-    borderRadius: 20,
+    borderRadius: 0,
   },
-  button: {
+  singleButton: {
     margin: 5,
   },
 
