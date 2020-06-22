@@ -77,8 +77,11 @@ export const styles = StyleSheet.create({
   // Modals
   modalContainer:{
     backgroundColor: '#fff',
-    padding: 5,
-    maxHeight: '90%'
+    padding: 10,
+  },
+  modalScrollview: {
+    flexGrow: 1, 
+    justifyContent: 'center',
   },
   radioButtonContainer: {
     flexDirection: 'row',
@@ -92,9 +95,6 @@ export const styles = StyleSheet.create({
     padding: 5,
     borderTopWidth: 2,
     borderTopColor: theme.colors.primary,
-  },
-  abilitiesList: {
-    padding: 10,
   },
   abilityRow: {
     flexDirection: 'row', 

@@ -1,9 +1,9 @@
 import React from 'react';
-import CompactView from './Settings'
-import AllModals from './Modals.js'
-import Abilities from './Abilities.js';
-import MainViewButton  from './Buttons.js'
-import { theme } from './Styles.js'
+import CompactView from './src/components/Settings'
+import AllModals from './src/components/Modals.js'
+import Abilities from './src/components/Abilities.js';
+import MainViewButton  from './src/components/Buttons.js'
+import { theme } from './src/components/Styles.js'
 import { Provider as PaperProvider, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 

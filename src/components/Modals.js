@@ -122,11 +122,9 @@ function ManageAbilities(props) {
             props.editAbility(abilityNumber, name, maxSlots, isShortRest)}
         />
 
-      <ScrollView style={styles.abilitiesList}>
+      <ScrollView style={{maxHeight: 400}}>
         {abilities.map((ability, i) => (
-          <View key={i}
-          style={styles.abilityRow}
-          >
+          <View key={i} style={styles.abilityRow}>
             <RadioButton.Item
               key={i}
               label={ability.name +": "+ ability.usedSlots +"/" +ability.maxSlots}
@@ -139,7 +137,6 @@ function ManageAbilities(props) {
               <Button 
                 onPress={() => props.moveUp(i)}
                 disabled={i===0 ? true : false}
-                style={styles.togglePositionButton}
                 mode="contained"
               >
                 <Icon name='arrow-up' />
@@ -149,7 +146,7 @@ function ManageAbilities(props) {
                 disabled={i===abilities.length-1 ? true : false}
                 mode="contained"
               >
-                <Icon name='arrow-down' style={{width: 100}}/>
+                <Icon name='arrow-down' />
               </Button>
             </View>
           </View>
@@ -234,10 +231,12 @@ function MyModal(props) {
         isVisible={props.modalVisible}
         onRequestClose={() => props.closeModal()}
       >
-        <View style={styles.modalContainer}>
-          <Headline style={{marginBottom: 15}}>{props.title}</Headline>
-          {props.children}
-        </View>
+        <ScrollView contentContainerStyle={styles.modalScrollview}>
+          <View style={styles.modalContainer}>
+            <Headline style={{marginBottom: 15}}>{props.title}</Headline>
+            {props.children}
+          </View>
+        </ScrollView>
       </Modal>
     </View>
   )
