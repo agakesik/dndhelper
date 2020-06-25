@@ -2,7 +2,7 @@ import LocalizedStrings from 'react-native-localization';
 
 export const translations = new LocalizedStrings({
   en:{
-    compactView: "compact View",
+    compactView: "compact view",
     shortRest: "short rest",
     longRest: "long rest",
     add: "add",

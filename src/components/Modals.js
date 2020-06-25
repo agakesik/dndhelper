@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { View, ScrollView } from 'react-native';
 import Modal from 'react-native-modal';
 import { RadioButton, TextInput, Text, Subheading, Button, Headline } from 'react-native-paper'
-import { theme, styles } from '../services/Styles.js'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SingleMenuButton, DoubleControllerButtons } from './Buttons'
+import { theme, styles } from '../services/Styles.js'
 import { translations } from '../services/translations.js'
 
 

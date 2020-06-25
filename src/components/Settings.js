@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { Switch } from 'react-native-paper'
 import { styles } from '../services/Styles';
 import { translations } from '../services/translations.js'
@@ -37,7 +37,6 @@ function SetLanguage(props) {
   const nextLanguage = (currentLanguage === 'en' ? 'pl' : 'en')
   return (
     <View style={styles.compactViewToggle}>
-      <Text>nextLanguage: {nextLanguage}</Text>
       <Text style={styles.settingsDescription}>english</Text>
       <Switch
         value={currentLanguage === 'en' ? false : true}

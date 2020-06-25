@@ -1,12 +1,11 @@
 import React from 'react';
+import { Provider as PaperProvider, Button } from 'react-native-paper';
+import AsyncStorage from '@react-native-community/async-storage';
 import Settings from './src/components/Settings'
 import AllModals from './src/components/Modals.js'
 import Abilities from './src/components/Abilities.js';
 import MainViewButton  from './src/components/Buttons.js'
 import { theme } from './src/services/Styles.js'
-import { Provider as PaperProvider, Button } from 'react-native-paper';
-import AsyncStorage from '@react-native-community/async-storage';
-import {Text} from 'react-native-paper'
 import { translations } from './src/services/translations.js'
 
 export default function App () {
@@ -25,10 +24,6 @@ export default function App () {
     readState('@saved_abilities', 'changeAbilities')
     translations.setLanguage(language);
   }, [])
-
-  const showState = () => {
-    console.log(JSON.stringify(abilities))
-  }
 
   const setLanguage = (language) => {
     changeLanguage(language)
@@ -151,7 +146,6 @@ export default function App () {
 
   return(
     <PaperProvider theme={theme}>
-      {/* <Text>hello!{translations.how}</Text> */}
       <Settings 
         compactView={compactView}
         toggleCompactView={() => changeAndSaveSetting(!compactView)}
