@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { SingleMenuButton, DoubleControllerButtons } from './Buttons'
 import { theme, styles } from '../services/Styles.js'
 import { translations } from '../services/translations.js'
+import Abilities from './Abilities';
 
 
 export default function AllModals(props) {
@@ -42,7 +43,7 @@ function AddAbility(props) {
   const addAbility = () => {
     if (name===""){
       alert(translations.errorEmptyName)
-    } else if (props.abilities.find(ability => ability.name === name)) {
+    } else if (props.abilities.find(ability => ability.name.toLowerCase() === name.toLowerCase())) {
       alert(translations.errorDuplicateName)
     } else if (maxSlots === 0) {
       alert(translations.errorNumber)
@@ -115,8 +116,9 @@ function ManageAbilities(props) {
       {...props} 
       closeModal={() => closeModal()}
       title={translations.manageAbilities}
-    >
+      >
       <EditAbility
+          abilities={abilities}
           modalVisible={props.editAbilityModalVisible}
           closeModal={() => props.closeEditModal()}
           ability={abilities[abilityNumber]}
@@ -180,17 +182,22 @@ function ManageAbilities(props) {
 
 function EditAbility(props) {
   const ability = props.ability || {name: "", maxSlots: '', shortRest: false}
+  const abilities = props.abilities
   
   const [name, setName] = useState(null);
   const [maxSlots, setMaxSlots] = useState(null);
   const [isShortRest, setIfShortRest] = useState(null);
 
   const editAbility = () => {
-    props.editAbility(name, maxSlots, isShortRest)
-    props.closeModal()
-    setName(null);
-    setMaxSlots(null);
-    setIfShortRest(null);
+    if (abilities.find(ability => ability.name.toLowerCase() === name.toLowerCase())) {
+      alert(translations.errorDuplicateName)
+    } else {
+      props.editAbility(name, maxSlots, isShortRest)
+      props.closeModal()
+      setName(null);
+      setMaxSlots(null);
+      setIfShortRest(null);
+    }
   }
 
   return(
