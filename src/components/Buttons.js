@@ -1,23 +1,25 @@
 import React from 'react';
 import { Button } from 'react-native-paper';
 import {  View } from 'react-native';
-import { theme, styles } from './Styles.js'
+import { theme, styles } from '../services/Styles.js'
+import { translations } from '../services/translations.js'
+
 
 export default function MainMenuButtons(props) {
   return (
     <View>
       <DoubleControllerButtons 
         modeContained={true}
-        firstButtonLabel="short rest"
+        firstButtonLabel={translations.shortRest}
         firstButtonOnPress={() => props.shortRest()}
-        secondButtonLabel="long rest"
+        secondButtonLabel={translations.longRest}
         secondButtonOnPress={() => props.longRest()}
       />
 
       <DoubleControllerButtons 
-        firstButtonLabel="dodaj"
+        firstButtonLabel={translations.add}
         firstButtonOnPress={() => props.openAddModal()}
-        secondButtonLabel="edytuj"
+        secondButtonLabel={translations.edit}
         secondButtonOnPress={() => props.openManageModal()}
       />
     </View>

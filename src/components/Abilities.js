@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, TouchableHighlight, ScrollView } from 'react-native';
-import { theme, styles } from './Styles.js'
 import { Surface, Title } from 'react-native-paper';
+import { theme, styles } from '../services/Styles.js'
 
 export default function Abilities(props) {
   const abilities = props.abilities

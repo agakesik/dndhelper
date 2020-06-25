@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 import { View, ScrollView } from 'react-native';
 import Modal from 'react-native-modal';
 import { RadioButton, TextInput, Text, Subheading, Button, Headline } from 'react-native-paper'
-import { theme, styles } from './Styles.js'
+import { theme, styles } from '../services/Styles.js'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SingleMenuButton, DoubleControllerButtons } from './Buttons'
+import { translations } from '../services/translations.js'
+
 
 export default function AllModals(props) {
   return (
@@ -39,11 +41,11 @@ function AddAbility(props) {
 
   const addAbility = () => {
     if (name===""){
-      alert("nazwa nie moze być pusta")
+      alert(translations.errorEmptyName)
     } else if (props.abilities.find(ability => ability.name === name)) {
-      alert("nazwa nie moze się powtarzać")
+      alert(translations.errorDuplicateName)
     } else if (maxSlots === 0) {
-      alert("liczba musi być większa niż 0 (i musi być cyfrą)")
+      alert(translations.errorNumber)
     } else {
       props.addAbility(name, maxSlots, isShortRest);
       setName("");
@@ -53,16 +55,16 @@ function AddAbility(props) {
   }
 
   return(
-    <MyModal {...props} title="Dodaj nową umiejętność">
+    <MyModal {...props} title={translations.addNewAbility}>
       <TextInput
-        placeholder="nazwa"
+        placeholder={translations.name}
         maxLength={25}
         onChangeText={text => setName(text)}
         value={name}
         style={{height: 40}}
       />
       <TextInput
-        placeholder="liczba użyć"
+        placeholder={translations.numberOfUses}
         placeholderTextColor="rgba(0,0,0,0.5)"
         maxLength={1}
         keyboardType={'numeric'}
@@ -79,21 +81,21 @@ function AddAbility(props) {
 
       <View style={styles.modalSummary}>
         <Subheading>nowa umiejętność:</Subheading>
-        <Text style={styles.backgroundText}>nazwa: <Subheading>{name}</Subheading></Text>
-        <Text style={styles.backgroundText}>liczba użyć: <Subheading>{maxSlots}</Subheading></Text>
-        <Text style={styles.backgroundText}>rodzaj: <Subheading>
-            {isShortRest ? "short rest" : "long rest"}
+        <Text style={styles.backgroundText}>{translations.name}: <Subheading>{name}</Subheading></Text>
+        <Text style={styles.backgroundText}>{translations.numberOfUses}: <Subheading>{maxSlots}</Subheading></Text>
+        <Text style={styles.backgroundText}>{translations.type}: <Subheading>
+            {isShortRest ? translations.shortRest : translations.longRest}
         </Subheading></Text>
       </View>
 
       <SingleMenuButton
         modeContained={true}
         onPress={() => addAbility()}
-        label="dodaj"
+        label={translations.add}
       />
       <SingleMenuButton
         onPress={() => props.closeModal()}
-        label="zakmnij"
+        label={translations.close}
       />
     </MyModal>
   );
@@ -112,7 +114,7 @@ function ManageAbilities(props) {
     <MyModal 
       {...props} 
       closeModal={() => closeModal()}
-      title="Zarządzaj umiejetnościami"
+      title={translations.manageAbilities}
     >
       <EditAbility
           modalVisible={props.editAbilityModalVisible}
@@ -155,12 +157,12 @@ function ManageAbilities(props) {
       
       <DoubleControllerButtons 
         modeContained={true}
-        firstButtonLabel="usuń"
+        firstButtonLabel={translations.delete}
         firstButtonOnPress={() => {
           props.deleteAbility(abilityNumber)
           chooseAbility(null)
         }}
-        secondButtonLabel="edytuj"
+        secondButtonLabel={translations.edit}
         secondButtonOnPress={() => {
           if (abilityNumber || abilityNumber === 0) {
             props.openEditModal()
@@ -169,7 +171,7 @@ function ManageAbilities(props) {
       />
       
       <SingleMenuButton
-        label="zamknij"
+        label={translations.close}
         onPress={() => closeModal()}
       />
     </MyModal>
@@ -192,14 +194,14 @@ function EditAbility(props) {
   }
 
   return(
-    <MyModal {...props} title={"Edytuj " + ability.name}> 
+    <MyModal {...props} title={translations.edit + " " + ability.name}> 
       <TextInput
-        placeholder={"nazwa: " + ability.name}
+        placeholder={translations.name + ": " + ability.name}
         value={name}
         onChangeText={text => setName(text)}
       />
       <TextInput
-        placeholder={"Użycia: " + ability.maxSlots}
+        placeholder={translations.numberOfUses + ": " + ability.maxSlots}
         value={maxSlots}
         onChangeText={text => setMaxSlots(text)}
       />
@@ -213,12 +215,12 @@ function EditAbility(props) {
 
       <SingleMenuButton
         onPress={() => editAbility()}
-        label="edytuj"
+        label={translations.edit}
         modeContained={true}
       />
       <SingleMenuButton
         onPress={() => props.closeModal()}
-        label="anuluj"
+        label={translations.close}
       />
     </MyModal>
   )
@@ -250,7 +252,7 @@ function ShortOrLongRestRadioButton(props) {
       >
         <View style={styles.radioButton}>
           <RadioButton.Item 
-            label={(props.currentIsShortRest ? "-> " : "    ") + "short rest"}
+            label={(props.currentIsShortRest ? "-> " : "    ") + translations.shortRest}
             value={true}
             status={props.isShortRest === true ? 'checked' : 'unchecked'}
             color={theme.colors.primary}
@@ -259,7 +261,7 @@ function ShortOrLongRestRadioButton(props) {
         <View style={styles.radioButton}>
           <RadioButton.Item
             label={ 
-              (props.editing ? (props.currentIsShortRest ? "    " : "-> ") : "    ") + "long rest"
+              (props.editing ? (props.currentIsShortRest ? "    " : "-> ") : "    ") + translations.longRest
             }
             value={false}
             status={props.isShortRest === false ? 'checked' : 'unchecked'}

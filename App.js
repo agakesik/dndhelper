@@ -1,17 +1,20 @@
 import React from 'react';
-import CompactView from './src/components/Settings'
+import Settings from './src/components/Settings'
 import AllModals from './src/components/Modals.js'
 import Abilities from './src/components/Abilities.js';
 import MainViewButton  from './src/components/Buttons.js'
-import { theme } from './src/components/Styles.js'
+import { theme } from './src/services/Styles.js'
 import { Provider as PaperProvider, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
+import {Text} from 'react-native-paper'
+import { translations } from './src/services/translations.js'
 
 export default function App () {
   const [compactView, toggleCompactView] = React.useState(false)
   const [addAbilityModalVisible, toggleAddModal] = React.useState(false)
   const [manageAbilitiesModalVisible, toggleManageModal] = React.useState(false)
   const [editAbilityModalVisible, toggleEditModal] = React.useState(false)
+  const [language, changeLanguage] = React.useState('en')
 
   const [abilities, changeAbilities] = React.useState([
     {name: "Przykład", maxSlots: 4, usedSlots: 2, shortRest: false}
@@ -20,10 +23,16 @@ export default function App () {
   React.useEffect(() => {
     readState('@saved_settings', 'toggleCompactView')
     readState('@saved_abilities', 'changeAbilities')
+    translations.setLanguage(language);
   }, [])
 
   const showState = () => {
     console.log(JSON.stringify(abilities))
+  }
+
+  const setLanguage = (language) => {
+    changeLanguage(language)
+    translations.setLanguage(language)
   }
 
   // Functions to save and retrieve data from aync storage
@@ -142,10 +151,12 @@ export default function App () {
 
   return(
     <PaperProvider theme={theme}>
-      <CompactView 
+      {/* <Text>hello!{translations.how}</Text> */}
+      <Settings 
         compactView={compactView}
         toggleCompactView={() => changeAndSaveSetting(!compactView)}
-        saveSettings={() => saveSettings()}
+        language={language}
+        setLanguage={(nextLanguage) => setLanguage(nextLanguage)}
       />
       <AllModals 
         abilities={abilities}

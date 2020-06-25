@@ -1,4 +1,3 @@
-// import React from 'react';
 import { DefaultTheme } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 
@@ -85,8 +84,10 @@ export const styles = StyleSheet.create({
   },
   radioButtonContainer: {
     flexDirection: 'row',
+    // justifyContent: 'space-between'
   },
   radioButton: {
+    paddingHorizontal: 10,
     width: '50%',
   },
   modalSummary: {
