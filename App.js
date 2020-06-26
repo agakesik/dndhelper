@@ -1,4 +1,5 @@
 import React from 'react';
+import { DrawerLayoutAndroid, View, Text } from 'react-native'
 import { Provider as PaperProvider } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import Settings from './src/components/Settings'
@@ -61,19 +62,30 @@ export default function App () {
     saveState('@saved_settings', changedSettings)
   }
 
+  // other
+
+  const drawerContent = (
+    <Settings 
+      compactView={compactView}
+      toggleCompactView={() => changeAndSaveSetting(!compactView)}
+      language={language}
+      setLanguage={(nextLanguage) => setLanguage(nextLanguage)}
+    />
+  );
+
   return(
     <PaperProvider theme={theme}>
-      <Settings 
-        compactView={compactView}
-        toggleCompactView={() => changeAndSaveSetting(!compactView)}
-        language={language}
-        setLanguage={(nextLanguage) => setLanguage(nextLanguage)}
-      />
-      <HomesScreen 
-        abilities={abilities}
-        changeAndSaveAbilities={(changedAbilities) => changeAndSaveAbilities(changedAbilities) }
-        compactView={compactView}
-      />
+      <DrawerLayoutAndroid
+        drawerWidth={300}
+        drawerPosition="left"
+        renderNavigationView={() => drawerContent}
+      >
+        <HomesScreen 
+          abilities={abilities}
+          changeAndSaveAbilities={(changedAbilities) => changeAndSaveAbilities(changedAbilities) }
+          compactView={compactView}
+        />
+      </DrawerLayoutAndroid>
     </PaperProvider>
   )
 }
