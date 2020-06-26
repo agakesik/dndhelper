@@ -12,7 +12,7 @@ export default function App () {
   const [language, changeLanguage] = React.useState('en')
 
   const [abilities, changeAbilities] = React.useState([
-    {name: "Przykład", maxSlots: 4, usedSlots: 2, shortRest: false}
+    {name: "Example", maxSlots: 4, usedSlots: 2, shortRest: false}
   ])
 
   React.useEffect(() => {

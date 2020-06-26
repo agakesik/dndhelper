@@ -48,9 +48,6 @@ export const styles = StyleSheet.create({
   },
 
   // Settings
-  settingGroup: {
-    width: '100%'
-  },
   settingsDescription: {
     fontSize: 17,
     textTransform: 'uppercase',
@@ -59,9 +56,11 @@ export const styles = StyleSheet.create({
   },
   settingsTitle: {
     backgroundColor: addOpacity(theme.colors.accent, 0.8),
-    // backgroundColor: theme.colors.accent
   },
-  
+  settingsList: {
+    padding: 15,
+    paddingLeft: 40,
+  },
 
   // Abilities
   abilitiesViewCompact: {

@@ -21,13 +21,7 @@ export default function Settings(props) {
 
  function CompactView(props) {
   return (
-    <View style={styles.settingGroup}>
-      {/* <Text style={styles.settingsDescription}>{translations.compactView}</Text> */}
-      {/* <Switch
-        value={props.compactView}
-        onValueChange={() => props.toggleCompactView()}
-        style={{margin: 10}}
-      /> */}
+    <View>
       <Checkbox.Item
         status={props.compactView ? 'checked' : 'unchecked'}
         onPress={() => props.toggleCompactView()}
@@ -44,7 +38,7 @@ export default function Settings(props) {
 function SetLanguage(props) {
   const currentLanguage = props.language
   return (
-    <View style={styles.settingGroup}>
+    <View>
       <Text style={[
         styles.settingsDescription,
         styles.settingsTitle
@@ -52,12 +46,7 @@ function SetLanguage(props) {
       {translations.getAvailableLanguages().map(language => (
         <View key={language}>
           <TouchableOpacity
-            style={{
-              padding: 15,
-              paddingLeft: 40,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
+            style={styles.settingsList}
             onPress={() => props.setLanguage(language)}>
             <Text >{language}</Text>
             {currentLanguage === language ? (
