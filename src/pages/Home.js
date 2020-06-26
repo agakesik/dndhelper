@@ -94,7 +94,6 @@ export default function HomesScreen (props) {
 
   return (
     <View style={{flex: 1}}>
-      <Text>Hello</Text>
       <AllModals 
         abilities={abilities}
         addAbilityModalVisible={addAbilityModalVisible}

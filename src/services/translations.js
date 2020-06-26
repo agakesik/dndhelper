@@ -1,7 +1,9 @@
 import LocalizedStrings from 'react-native-localization';
 
 export const translations = new LocalizedStrings({
-  en:{
+  english:{
+    LANGUAGE_NAME: "English",
+    changeLanguage: "change language",
     compactView: "compact view",
     shortRest: "short rest",
     longRest: "long rest",
@@ -18,8 +20,10 @@ export const translations = new LocalizedStrings({
     errorNumber: "number of uses has to be a number (bigger than 0)",
     manageAbilities: "Manage abilities",
   },
-  pl: {
-    compactView: "widok kompaktory",
+  polski: {
+    LANGUAGE_NAME: "Polski",
+    changeLanguage: "zmień język",
+    compactView: "widok kompaktowy",
     shortRest: "krótki odpoczynek",
     longRest: "długi odpoczynek",
     add: "dodaj",

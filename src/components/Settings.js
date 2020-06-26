@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { Switch } from 'react-native-paper'
-import { styles } from '../services/Styles';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Checkbox } from 'react-native-paper'
+import { styles, blackPrimary } from '../services/Styles';
 import { translations } from '../services/translations.js'
 
 export default function Settings(props) {
   return (
-    <View>
+    <View style={{marginTop: 20}}> 
       <SetLanguage 
         language={props.language}
         setLanguage={(nextLanguage) => props.setLanguage(nextLanguage)}
@@ -21,12 +21,21 @@ export default function Settings(props) {
 
  function CompactView(props) {
   return (
-    <View style={styles.compactViewToggle}>
-      <Text style={styles.settingsDescription}>{translations.compactView}</Text>
-      <Switch
+    <View style={styles.settingGroup}>
+      {/* <Text style={styles.settingsDescription}>{translations.compactView}</Text> */}
+      {/* <Switch
         value={props.compactView}
         onValueChange={() => props.toggleCompactView()}
         style={{margin: 10}}
+      /> */}
+      <Checkbox.Item
+        status={props.compactView ? 'checked' : 'unchecked'}
+        onPress={() => props.toggleCompactView()}
+        label={translations.compactView}
+        labelStyle={[styles.settingsDescription, {padding: 0}]}
+        style={styles.settingsTitle}
+        theme={blackPrimary}
+        color="black"
       />
     </View>
   );
@@ -34,18 +43,29 @@ export default function Settings(props) {
 
 function SetLanguage(props) {
   const currentLanguage = props.language
-  const nextLanguage = (currentLanguage === 'en' ? 'pl' : 'en')
   return (
-    <View style={styles.compactViewToggle}>
-      <Text style={styles.settingsDescription}>english</Text>
-      <Switch
-        value={currentLanguage === 'en' ? false : true}
-        onValueChange={() => {
-          props.setLanguage(nextLanguage)
-        }}
-        style={{margin: 10}}
-      />
-      <Text style={styles.settingsDescription}>polski</Text>
+    <View style={styles.settingGroup}>
+      <Text style={[
+        styles.settingsDescription,
+        styles.settingsTitle
+      ]}>{translations.changeLanguage}</Text>
+      {translations.getAvailableLanguages().map(language => (
+        <View key={language}>
+          <TouchableOpacity
+            style={{
+              padding: 15,
+              paddingLeft: 40,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+            onPress={() => props.setLanguage(language)}>
+            <Text >{language}</Text>
+            {currentLanguage === language ? (
+              <Text style={{marginLeft: 30}}>√</Text>
+            ) : null}
+          </TouchableOpacity>
+        </View>
+      ))}
     </View>
   )
 }

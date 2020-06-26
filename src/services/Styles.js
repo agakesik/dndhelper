@@ -1,17 +1,28 @@
 import { DefaultTheme } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 
+function addOpacity(rgbString, opacity) {
+  return rgbString.split(', 1)')[0] + "," + opacity + ")"
+}
+
 export const theme = {
   ...DefaultTheme,
   roundness: 2,
   colors: {
     ...DefaultTheme.colors,
     primary: '#3C8A90',
-    accent: '#FFD343',
+    accent: 'rgba(255, 211, 67, 1)',
     surface: '#f6f6f6',
     gray: '#b3b3b3',
 
   },
+}
+
+export const blackPrimary = {
+  ...theme,
+  colors: {
+    primary: 'black',
+  }
 }
 
 export const styles = StyleSheet.create({
@@ -37,14 +48,20 @@ export const styles = StyleSheet.create({
   },
 
   // Settings
+  settingGroup: {
+    width: '100%'
+  },
   settingsDescription: {
-    alignSelf: 'center', 
-    fontSize: 12
+    fontSize: 17,
+    textTransform: 'uppercase',
+    color: 'black',
+    padding: 15,
   },
-  compactViewToggle: {
-    flexDirection: 'row', 
-    justifyContent: 'flex-end'
+  settingsTitle: {
+    backgroundColor: addOpacity(theme.colors.accent, 0.8),
+    // backgroundColor: theme.colors.accent
   },
+  
 
   // Abilities
   abilitiesViewCompact: {
