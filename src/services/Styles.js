@@ -10,8 +10,8 @@ export const theme = {
   roundness: 2,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#3C8A90',
-    accent: 'rgba(255, 211, 67, 1)',
+    primary: '#566fbf',
+    accent: 'rgba(255, 217, 91, 1)',
     surface: '#f6f6f6',
     gray: '#b3b3b3',
 
@@ -26,6 +26,7 @@ export const blackPrimary = {
 }
 
 export const styles = StyleSheet.create({
+  
   // General
   backgroundText: {
     color: theme.colors.gray,
@@ -45,6 +46,15 @@ export const styles = StyleSheet.create({
   },
   singleButton: {
     margin: 5,
+  },
+  openSettings: {
+    alignSelf: 'flex-start', 
+    padding: 7, 
+    margin: 10, 
+    backgroundColor: addOpacity(theme.colors.accent, 0.8),
+    borderRadius: 5,
+    elevation: 20,
+
   },
 
   // Settings

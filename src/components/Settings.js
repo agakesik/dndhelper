@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Checkbox } from 'react-native-paper'
-import { styles, blackPrimary } from '../services/Styles';
+import { Checkbox, Button } from 'react-native-paper'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { theme, styles, blackPrimary } from '../services/Styles';
 import { translations } from '../services/translations.js'
 
 export default function Settings(props) {
@@ -56,5 +57,19 @@ function SetLanguage(props) {
         </View>
       ))}
     </View>
+  )
+}
+
+export function OpenSettings(props) {
+  return (
+
+      <TouchableOpacity 
+        style={styles.openSettings}
+        onPress={() => props.open()}
+        // mode="contained"
+        color={theme.colors.accent}
+        >
+        <Icon name='cog' style={{fontSize: 20}} />
+      </TouchableOpacity>
   )
 }

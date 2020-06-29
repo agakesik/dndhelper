@@ -7,7 +7,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { SingleMenuButton, DoubleControllerButtons } from './Buttons'
 import { theme, styles } from '../services/Styles.js'
 import { translations } from '../services/translations.js'
-import Abilities from './Abilities';
 
 
 export default function AllModals(props) {

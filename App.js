@@ -1,8 +1,8 @@
 import React from 'react';
 import { DrawerLayoutAndroid, View, Text } from 'react-native'
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider, Surface } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
-import Settings from './src/components/Settings'
+import Settings, {OpenSettings} from './src/components/Settings'
 import HomesScreen from './src/pages/Home';
 import { theme } from './src/services/Styles.js'
 import { translations } from './src/services/translations.js'
@@ -73,18 +73,25 @@ export default function App () {
     />
   );
 
+  const drawer = React.useRef(null);
+ 
+
   return(
     <PaperProvider theme={theme}>
       <DrawerLayoutAndroid
         drawerWidth={300}
+        ref={drawer}
         drawerPosition="left"
         renderNavigationView={() => drawerContent}
       >
+        <OpenSettings 
+          open={() => drawer.current.openDrawer()}
+        />
         <HomesScreen 
           abilities={abilities}
           changeAndSaveAbilities={(changedAbilities) => changeAndSaveAbilities(changedAbilities) }
           compactView={compactView}
-        />
+          />
       </DrawerLayoutAndroid>
     </PaperProvider>
   )

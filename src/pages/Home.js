@@ -3,6 +3,7 @@ import AllModals from '../components/Modals.js'
 import Abilities from '../components/Abilities.js';
 import MainViewButton  from '../components/Buttons.js'
 import { View, Text } from 'react-native';
+import { Surface } from 'react-native-paper';
 
 export default function HomesScreen (props) {
   const [addAbilityModalVisible, toggleAddModal] = React.useState(false)
@@ -93,7 +94,7 @@ export default function HomesScreen (props) {
   }
 
   return (
-    <View style={{flex: 1}}>
+    <Surface style={{flex: 1, elevation: 5}}>
       <AllModals 
         abilities={abilities}
         addAbilityModalVisible={addAbilityModalVisible}
@@ -120,7 +121,7 @@ export default function HomesScreen (props) {
         openAddModal={() => toggleAddModal(true)}
         openManageModal={() => toggleManageModal(true)}
       />
-    </View>
+      </Surface>
   )
 
 }
