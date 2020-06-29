@@ -62,7 +62,7 @@ export default function App () {
     saveState('@saved_settings', changedSettings)
   }
 
-  // other
+  // --------- drawer ------------
 
   const drawerContent = (
     <Settings 

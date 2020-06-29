@@ -10,8 +10,8 @@ export const theme = {
   roundness: 2,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#566fbf',
-    accent: '#f5cf70',
+    primary: '#526cd4',
+    accent: 'rgba(255, 222, 89, 1)',
     surface: '#f6f6f6',
     gray: '#b3b3b3',
 
@@ -65,7 +65,7 @@ export const styles = StyleSheet.create({
     padding: 15,
   },
   settingsTitle: {
-    backgroundColor: theme.colors.accent,
+    backgroundColor: addOpacity(theme.colors.accent, 0.8),
   },
   settingsList: {
     padding: 15,
