@@ -11,7 +11,7 @@ export const theme = {
   colors: {
     ...DefaultTheme.colors,
     primary: '#566fbf',
-    accent: 'rgba(255, 217, 91, 1)',
+    accent: '#f5cf70',
     surface: '#f6f6f6',
     gray: '#b3b3b3',
 
@@ -51,7 +51,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'flex-start', 
     padding: 7, 
     margin: 10, 
-    backgroundColor: addOpacity(theme.colors.accent, 0.8),
+    backgroundColor: theme.colors.accent,
     borderRadius: 5,
     elevation: 20,
 
@@ -65,11 +65,12 @@ export const styles = StyleSheet.create({
     padding: 15,
   },
   settingsTitle: {
-    backgroundColor: addOpacity(theme.colors.accent, 0.8),
+    backgroundColor: theme.colors.accent,
   },
   settingsList: {
     padding: 15,
     paddingLeft: 40,
+    flexDirection: 'row',
   },
 
   // Abilities

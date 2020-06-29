@@ -9,7 +9,7 @@ import { translations } from './src/services/translations.js'
 
 export default function App () {
   const [compactView, toggleCompactView] = React.useState(false)
-  const [language, changeLanguage] = React.useState('en')
+  const [language, changeLanguage] = React.useState('english')
 
   const [abilities, changeAbilities] = React.useState([
     {name: "Example", maxSlots: 4, usedSlots: 2, shortRest: false}
