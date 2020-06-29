@@ -1,6 +1,6 @@
 {
 	"name": "dndHelper",
-	"version": "0.2.1",
+	"version": "0.3.0",
 	"private": true,
 	"scripts": {
 		"android": "react-native run-android",
@@ -10,6 +10,7 @@
 		"lint": "eslint ."
 	},
 	"dependencies": {
+		"@bam.tech/react-native-make": "^3.0.0",
 		"@react-native-community/async-storage": "^1.11.0",
 		"@react-navigation/native": "^5.6.0",
 		"react": "16.11.0",
