@@ -40,7 +40,7 @@ function AddAbility(props) {
   const [isShortRest, setIfShortRest] = useState(false);
 
   const addAbility = () => {
-    if (name===""){
+    if (name==="" && name != null){
       alert(translations.errorEmptyName)
     } else if (props.abilities.find(ability => ability.name.toLowerCase() === name.toLowerCase())) {
       alert(translations.errorDuplicateName)
@@ -188,7 +188,7 @@ function EditAbility(props) {
   const [isShortRest, setIfShortRest] = useState(null);
 
   const editAbility = () => {
-    if (abilities.find(ability => ability.name.toLowerCase() === name.toLowerCase())) {
+    if (name != null && abilities.find(ability => ability.name.toLowerCase() === name.toLowerCase())) {
       alert(translations.errorDuplicateName)
     } else {
       props.editAbility(name, maxSlots, isShortRest)
