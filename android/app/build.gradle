@@ -132,8 +132,8 @@ android {
         applicationId "com.dndhelper"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3001
-        versionName "0.3.0"
+        versionCode 3011
+        versionName "0.3.1"
     }
     splits {
         abi {
