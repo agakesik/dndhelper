@@ -80,7 +80,7 @@ function AddAbility(props) {
       />
 
       <View style={styles.modalSummary}>
-        <Subheading>nowa umiejętność:</Subheading>
+        <Subheading>{translations.newAbility}:</Subheading>
         <Text style={styles.backgroundText}>{translations.name}: <Subheading>{name}</Subheading></Text>
         <Text style={styles.backgroundText}>{translations.numberOfUses}: <Subheading>{maxSlots}</Subheading></Text>
         <Text style={styles.backgroundText}>{translations.type}: <Subheading>
